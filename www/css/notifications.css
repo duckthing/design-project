@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+#notificationSection {
+  width: 90%;
+  max-width: 800px;
+  margin: 2em auto;
+  padding: 1.5em;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#notificationList {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border: 3px solid #e9e9e9;
+  padding: 1em;
+  border-radius: 5px;
+}
+
+.notification p {
+  margin: 1;
+  color: #333;
+  font-size: 1em;
+}
+
+.notification button {
+  padding: 0.5em 1em;
+  background-color: #707070;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3;
+}
+
+.notification button:hover {
+  background-color: #cdcdcd;
+}
+
+@media (max-width: 600px) {
+  #notificationSection {
+    padding: 1em;
+  }
+
+  .notification {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notification button {
+    margin-top: 0.5em;
+  }
+}
