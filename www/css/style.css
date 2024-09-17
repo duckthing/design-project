@@ -9,19 +9,27 @@ body {
 #main-nav {
   background-color: #97cbb2;
   padding: 1em;
-  text-align: center;
+  display: flex;
+  justify-content: flex-start;
+  gap: 1em;
 }
 
 #main-nav .nav-link {
   color: white;
   text-decoration: none;
-  padding: 0.75em 2em;
+  padding: 0.55em 0em;
   background-color: #85ac9d;
-  margin: 0 0.5em;
+  margin: 0 0.15em;
   border-radius: 5px;
   transition: background-color 0.3 ease;
-  width: 150px;
-  text-align: left;
+  width: 115px;
+  text-align: justify;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
 }
 
 #main-nav .nav-link:hover {
