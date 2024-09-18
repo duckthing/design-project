@@ -10,16 +10,16 @@ body {
   background-color: #97cbb2;
   padding: 1em;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   gap: 1em;
 }
 
 #main-nav .nav-link {
   color: white;
   text-decoration: none;
-  padding: 0.55em 0em;
+  padding: 0.40em 0em;
   background-color: #85ac9d;
-  margin: 0 0.15em;
+  margin: 0 0.05em;
   border-radius: 5px;
   transition: background-color 0.3 ease;
   width: 115px;
