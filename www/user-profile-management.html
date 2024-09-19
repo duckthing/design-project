@@ -87,11 +87,25 @@
 					<br>
 					<h2>Volunteer preferences</h2>
 					<form>
-						<label for="skills">Skills</label>
-							<select id="skills" name="skills" required>
-								<option value="skill1">Skill 1</option>
-							</select>
+						<label for="skillSelect">Skills</label>
+							<label for="addSkill">
+								<select id="skillSelect" name="skillSelect" required>
+									<option value="skill1">Skill 1</option>
+								</select>
+							</label>
+							<button id="addSkill">Add Skill</button>
 							<br>
+							<!-- Where the skills get added -->
+							<table class="multiselect">
+								<tr>
+									<th>Skill</th>
+									<th>Actions</th>
+								</tr>
+								<tr>
+									<td>Skill 1</td>
+									<td><button class="fill cancel">Remove</button></td>
+								</tr>
+							</table>
 						<label for="preferences">Preferences</label>
 							<textarea type="" id="preferences" name="preferences" maxlength="500"></textarea>
 							<br>
