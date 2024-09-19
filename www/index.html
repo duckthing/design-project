@@ -2,18 +2,83 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="./css/style.css">
 		<title>Volunteer Management System</title>
 	</head>
 	<body>
 		<nav id="main-nav">
-			<a class="nav-link" href="/www/">Home</a>
-			<a class="nav-link" href="./user-profile-management.html">Profile</a>
-			<a class="nav-link" href="./notifications.html">Notifications</a>
-			<a class="nav-link" href="./volunteer-history.html">History</a>
+			<div class="nav-header">
+				<button class="nav-toggle" id="nav-toggle-btn">&#9776;</button>
+			</div>
+			<div class="nav-links" id="nav-links">
+				<a class="nav-link" href="/www/">Home</a>
+				<a class="nav-link" href="./user-profile-management.html">Profile</a>
+				<a class="nav-link" href="./notifications.html">Notifications</a>
+				<a class="nav-link" href="./volunteer-history.html">History</a>
+			</div>
+
 		</nav>
-		<p id="content-text">
-			Other things
-		</p>
+		
+		<header id="hero-section">
+			<img id="hero-image" src="./img/volunteer1.jpg" alt="Our Impact Image" class="impact-image">
+
+			<div class="hero-content">
+				<h1> Make a Difference in Your Community</h1>
+				<p>Join our platform and start volunteering</p>
+				<a href="./volunteer-matching-form.html" class="cta-button">Find Opportunities</a>
+			</div>
+		</header>
+
+		<section id="featured-opportunities">
+			<h2>Featured Volunteer Opportunities</h2>
+			<div class="opportunity-list">
+				<div class="opportunity">
+					<h3>Beach Cleanup</h3>
+						<p>Help us clean up our beaches on October 1, 2024. Make a difference!</p>
+						<a href="./beach-cleanup-details.html" class="cta-button">Learn More</a>
+				</div>
+	
+				<div class="opportunity">
+					<h3>Community Garden</h3>
+						<p>Volunteer at our community garden and help grow food for those in need.</p>
+						<a href="./community-garden-details.html" class="cta-button">Learn More</a>
+				</div>
+			</div>
+	</section>
+	
+
+		<section id="about-us">
+			<h2>About Us</h2>
+			<p>Our platform connects volunteers with meaningful opportunities to make a positive impact in their communities. From environmental initiatives to helping the needy, we aim to foster a spirit of giving and unity.</p>
+			<a href="./" class="cta-button">Learn More</a>
+		</section>
+
+		<section id="impact">
+			<h2>Our Impact</h2>
+			<div class="impact-stats">
+				<div class="stat">
+					<h3>10,000+</h3>
+					<p>Volunteers</p>
+				</div>
+				<div class="stat">
+					<h3>500+</h3>
+					<p>Projects Completed</p>
+				</div>
+				<div class="stat">
+					<h3>1,000+</h3>
+					<p>Communities Impacted</p>
+				</div>
+			</div>
+		</section>
+
+		<footer id="main-footer">
+			<h2>Ready to Volunteer?</h2>
+			<p>Sign up and start making a difference today!</p>
+			<button href="./" id="footer-button">Sign Up</button>
+		</footer>
+
+		<script src="./js/menu.js"></script>
+
 	</body>
 </html>
