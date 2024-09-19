@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="./css/example.css">
-		<title>Manage User Profile</title>
+		<title>Create new event</title>
 	</head>
 	<body>
 		<nav>
@@ -13,19 +13,23 @@
 		</nav>
 		<div class="center">
 			<article>
-				<h1>Update your profile</h1>
-				<!-- Personal info -->
+				<h1>Create an event</h1>
 				<div class="panelblock">
-					<h2>Personal information</h2>
+					<h2>New event</h2>
 					<form>
-						<label for="fullName">Full name</label>
-							<input type="text" id="fullName" name="fullName" maxlength="50" required>
+						<h3>Event details</h3>
+						<label for="eventName">Event name</label>
+							<input type="text" id="eventName" name="eventName" maxlength="100" required>
 							<br>
-						<label for="address1">Address 1</label>
-							<input type="text" id="address1" name="address1" maxlength="100" required>
+						<label for="eventDate">Date</label>
+							<input type="datetime-local" id="eventDate" name="eventDate" required>
 							<br>
-						<label for="address2">Address 2</label>
-							<input type="text" id="address2" name="address2" maxlength="100">
+						<label for="urgent">Urgent?</label>
+							<input type="checkbox" id="urgent" name="urgent">
+							<br>
+						<h3>Location</h3>
+						<label for="address">Address</label>
+							<input type="text" id="address" name="address" maxlength="100" required>
 							<br>
 						<label for="city">City</label>
 							<input type="text" id="city" name="city" maxlength="100" required>
@@ -84,23 +88,7 @@
 								<option value="WY">Wyoming</option>
 							</select>
 							<br>
-					<br>
-					<h2>Volunteer preferences</h2>
-					<form>
-						<label for="skills">Skills</label>
-							<select id="skills" name="skills" required>
-								<option value="skill1">Skill 1</option>
-							</select>
-							<br>
-						<label for="preferences">Preferences</label>
-							<textarea type="" id="preferences" name="preferences" maxlength="500"></textarea>
-							<br>
-
-						<!-- TODO: Make it so you can add more dates -->
-						<label for="availability">Availability</label>
-							<input type="date" id="availability" name="availability" maxlength="100" required>
-							<br>
-						<input type="submit" value="Update information">
+						<input type="submit" value="Create event">
 					</form>
 				</div>
 			</article>
