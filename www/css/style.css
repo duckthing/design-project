@@ -233,9 +233,11 @@ body {
   .nav-links {
     display: none;
     flex-direction: column;
-    width: 100%;
+    height: 20%;
+    width: 75%;
     background-color: #7cae97;
     text-align: center;
+    margin: 0 auto;
   }
 
   .nav-links.show {
