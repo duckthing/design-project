@@ -1,0 +1,64 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 90%;
+  margin: 2em auto;
+  padding: 1em;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+#volunteer-history {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2em;
+}
+
+#volunteer-history th, #volunteer-history td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#volunteer-history th {
+  background-color: #85ac9d;
+  color: white;
+  font-weight: bold;
+}
+
+#volunteer-history tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#volunteer-history tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Participation Status Colors */
+td:last-child {
+  font-weight: bold;
+}
+
+td:last-child.completed {
+  color: green;
+}
+
+td:last-child.in-progress {
+  color: orange;
+}
+
+td:last-child.not-started {
+  color: red;
+}
