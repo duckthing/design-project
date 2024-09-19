@@ -118,3 +118,50 @@ input[type="submit"]:active {
 	justify-content: center;
 	flex: 1 1 0px;
 }
+
+tr:first-child {
+	border-radius: 6px 6px 0px 0px;
+}
+tr:nth-child(odd) {
+	background-color: darkgray;
+}
+tr:nth-child(even) {
+	background-color: lightgray;
+}
+tr {
+	width: 100%;
+}
+
+table {
+	min-width: 100%;
+	table-layout: fixed;
+}
+
+table:first-child {
+	border-radius: 10px 10px 0px 0px;
+}
+
+td.eventActions {
+	display: flex;
+	flex-direction: row;
+}
+
+.eventActions button {
+	background-color: lightgray;
+	border-radius: 4px;
+	border: 1px solid black;
+	width: 50%;
+	min-height: 35px;
+}
+
+button {
+	cursor: pointer;
+}
+
+button.accept {
+	background-color: white;
+}
+
+button:active {
+	background-color: slategray;
+}
