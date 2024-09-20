@@ -62,3 +62,38 @@ td:last-child.in-progress {
 td:last-child.not-started {
   color: red;
 }
+
+@media (max-width: 600px) {
+  #volunteer-history, #volunteer-history tr {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #volunteer-history tr {
+    background-color: white;
+    margin-bottom: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #volunteer-history td {
+    display: flex;
+    justify-content: flex-start;
+    padding: 12px;
+  }
+
+  #volunteer-history td::before {
+    content: attr(data-label);
+    font-weight: bold;
+  }
+
+  #volunteer-history td:first-child {
+    font-weight: bold;
+  }  
+
+  td:last-child {
+    text-align: right;
+  }
+}
