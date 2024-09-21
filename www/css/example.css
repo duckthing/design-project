@@ -1,11 +1,11 @@
 html {
 	font-family: Arial, Helvetica, sans-serif;
-	background-color: slateblue;
+	background-color: slategray;
 }
 
 nav {
 	display: flex;
-	background-color: mediumpurple;
+	background-color: darkgray;
 	flex-wrap: wrap;
 	border-radius: 4px;
 	padding: 4px;
@@ -109,7 +109,7 @@ input[type="submit"]:active {
 	padding: 12px;
 	margin-bottom: 30px;
 	gap: 2px;
-	background-color: mediumpurple;
+	background-color: gray;
 	border-radius: 8px;
 	box-shadow: 0px 0px 8px -1px black;
 }
