@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="./css/example.css">
 		<title>Manage User Profile</title>
+		<script src="js/userprefs-manage-skills.js"></script>
 	</head>
 	<body>
 		<nav>
@@ -91,19 +92,21 @@
 							<label for="addSkill">
 								<select id="skillSelect" name="skillSelect" required>
 									<option value="skill1">Skill 1</option>
+									<option value="skill2">Skill 2</option>
+									<option value="skill3">Skill 3</option>
 								</select>
 							</label>
-							<button id="addSkill">Add Skill</button>
+							<button type="button" id="addSkill" onclick="userprefsAddSkill()">Add Skill</button>
 							<br>
 							<!-- Where the skills get added -->
-							<table class="multiselect">
+							<table id="selectedSkillTable" class="multiselect">
 								<tr>
 									<th>Skill</th>
 									<th>Actions</th>
 								</tr>
-								<tr>
-									<td>Skill 1</td>
-									<td><button class="fill cancel">Remove</button></td>
+								<tr id="skill2">
+									<td>Skill 2</td>
+									<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('skill2')">Remove</button></td>
 								</tr>
 							</table>
 						<label for="preferences">Preferences</label>
