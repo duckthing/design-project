@@ -1,4 +1,14 @@
 {
+  "name": "design-project",
+  "version": "1.0.0",
+  "description": "Install all packages first:",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^4.21.0"
