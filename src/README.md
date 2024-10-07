@@ -1,3 +1,4 @@
-Server code goes here.
+# About
+'src' should have server logic *ONLY*.
 
-'server.js' should mostly source code from here.
+'server.js' should read only source code from here.
