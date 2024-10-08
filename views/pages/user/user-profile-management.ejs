@@ -2,16 +2,12 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="./css/example.css">
+		<link rel="stylesheet" href="/css/example.css">
 		<title>Manage User Profile</title>
-		<script src="js/userprefs-manage-skills.js"></script>
+		<script src="/js/userprefs-manage-skills.js"></script>
 	</head>
 	<body>
-		<nav>
-			<a href="./">Home</a>
-			<a href="./user-profile-management.html">Profile</a>
-			<a href="./notifications.html">Notifications</a>
-		</nav>
+		<%- include("../../components/navbar.ejs") %>
 		<div class="center">
 			<article>
 				<h1>Update your profile</h1>
@@ -20,16 +16,16 @@
 					<h2>Personal information</h2>
 					<form>
 						<label for="fullName">Full name</label>
-							<input type="text" id="fullName" name="fullName" maxlength="50" required>
+							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%-fullName%>" required>
 							<br>
 						<label for="address1">Address 1</label>
-							<input type="text" id="address1" name="address1" maxlength="100" required>
+							<input type="text" id="address1" name="address1" maxlength="100" value="<%address1%>" required>
 							<br>
 						<label for="address2">Address 2</label>
 							<input type="text" id="address2" name="address2" maxlength="100">
 							<br>
 						<label for="city">City</label>
-							<input type="text" id="city" name="city" maxlength="100" required>
+							<input type="text" id="city" name="city" maxlength="100" value="<%city%>" required>
 							<br>
 						<label for="state">State</label>
 							<select id="state" name="state">

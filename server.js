@@ -4,11 +4,10 @@ const app = express();
 const port = 3000;
 
 app.set('view engine', 'ejs');
-// app.use(express.static("static"));
-// app.use("/css", express.static("www/css"));
-// app.use("/img", express.static("www/img"));
-// app.use("/js", express.static("www/js"));
-app.use(express.static("www"));
+app.use(express.static("static"));
+app.use("/css", express.static("www/css"));
+app.use("/img", express.static("www/img"));
+app.use("/js", express.static("www/js"));
 
 function addEndpoints(app, startPath, mountPath) {
 	// Recursively go through the startPath (./api/) directory and
