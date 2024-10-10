@@ -192,3 +192,69 @@ table.multiselect {
 	min-width: none;
 	width: 10px;
 }
+
+@media (max-width: 600px) {
+	nav {
+		flex-direction: column !important;
+	}
+	
+	nav a {
+		font-size: 14px;
+		padding: 8px;
+		border-left: none;
+		border-bottom: black 2px dotted;
+	}
+
+	article h1 {
+		font-size: 20px;
+		text-align: center;
+		margin-bottom: 16px;
+	}
+
+	label {
+		width: auto;
+		text-align: left;
+		margin-right: 0;
+	}
+
+	input,
+	select,
+	textarea {
+		width: 100%;
+	}
+
+	input[type="submit"] {
+		font-size: 16px;
+		padding: 12px;
+	}
+
+	.panelblock {
+		padding: 8px;
+		margin-bottom: 20px;
+		box-shadow: none;
+	}
+
+	.center {
+		flex-direction: column;
+		padding: 8px;
+	}
+
+	table {
+		min-width: 100%;
+		font-size: 14px;
+	}
+
+	td.eventActions {
+		flex-direction: column;
+	}
+
+	.eventActions button {
+		width: 100%;
+		margin-bottom: 8px;
+	}
+
+	button {
+		padding: 8px;
+		font-size: 14px;
+	}
+}
