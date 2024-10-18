@@ -4,25 +4,12 @@ let data = {
 	address2: "",
 	city: "Houston",
 	state: "TX",
-	allSkills: [
-		{
-			id: "moving",
-			name: "Moving",
-		},
-		{
-			id: "misc",
-			name: "Miscellaneous",
-		},
-		{
-			id: "moving",
-			name: "Moving",
-		},
-	],
 	chosenSkills: [
 		"moving"
 	],
 	preferences: "No preferences",
-	availability: "01/02/2024"
+	availability: "01/02/2024",
+	require: require,
 };
 
 
