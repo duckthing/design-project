@@ -16,19 +16,29 @@
 					<h2>Personal information</h2>
 					<form>
 						<label for="fullName">Full name</label>
-							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%-fullName%>" required>
+							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%=fullName%>" required>
 							<br>
 						<label for="address1">Address 1</label>
-							<input type="text" id="address1" name="address1" maxlength="100" value="<%address1%>" required>
+							<input type="text" id="address1" name="address1" maxlength="100" value="<%=address1%>" required>
 							<br>
 						<label for="address2">Address 2</label>
-							<input type="text" id="address2" name="address2" maxlength="100">
+							<input type="text" id="address2" name="address2" maxlength="100" value="<%=address2%>">
 							<br>
 						<label for="city">City</label>
-							<input type="text" id="city" name="city" maxlength="100" value="<%city%>" required>
+							<input type="text" id="city" name="city" maxlength="100" value="<%=city%>" required>
 							<br>
 						<label for="state">State</label>
 							<select id="state" name="state">
+								<% const stateModule = require("../../data/states.js") %>
+								<% for (i = 0; i < stateModule.stateCodes.length; i++) { %>
+									<% const currStateCode = stateModule.stateCodes[i]; %>
+									<% const currStateName = stateModule.states[i]; %>
+									<% if (currStateCode == state) { %>
+										<option selected value=<%= currStateCode %>><%= currStateName %></option>
+									<% } else { %>
+										<option value=<%= currStateCode %>><%= currStateName %></option>
+									<% } %>
+								<% } %>
 								
 							</select>
 							<br>
@@ -57,7 +67,7 @@
 								</tr>
 							</table>
 						<label for="preferences">Preferences</label>
-							<textarea type="" id="preferences" name="preferences" maxlength="500"></textarea>
+							<textarea type="" id="preferences" name="preferences" maxlength="500"><%=preferences%></textarea>
 							<br>
 
 						<!-- TODO: Make it so you can add more dates -->
