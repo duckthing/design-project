@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sitemap</title>
+	</head>
+	<body>
+		<h1>Sitemap</h1>
+		Temporary place to access everything. Some parts might need authentication.
+		<h2>GET paths</h2>
+		<ul>
+		<% sites.forEach(function(site){ %>
+			<li><a href=<%= site %>><%= site %></a></li>
+		<% }); %>
+		</ul>
+	</body>
+</html>
