@@ -16,3 +16,8 @@ With NodeJS installed, put this into a terminal in the project folder:
 ```
 node ./server.js
 ```
+
+To find any link you can access, visit the sitemap:
+```
+localhost:3000/sitemap
+```

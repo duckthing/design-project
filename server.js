@@ -1,7 +1,7 @@
 const fs = require("fs");
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 8080;
 
 app.set('view engine', 'ejs');
 app.use(express.static("static"));
@@ -9,6 +9,7 @@ app.use("/css", express.static("www/css"));
 app.use("/img", express.static("www/img"));
 app.use("/js", express.static("www/js"));
 
+let getPaths = []; // For creating the sitemap
 function addEndpoints(app, startPath, mountPath) {
 	// Recursively go through the startPath (./api/) directory and
 	// create endpoints from javascript files
@@ -40,6 +41,7 @@ function addEndpoints(app, startPath, mountPath) {
 					if (mod.get != null) {
 						console.log(endpointPath);
 						app.get(endpointPath, mod.get);
+						getPaths.push(endpointPath);
 					}
 
 					if (mod.post != null) {
@@ -62,7 +64,8 @@ function addEndpoints(app, startPath, mountPath) {
 };
 
 // Add the endpoints
-addEndpoints(app, "/endpoints/", "/");
+addEndpoints(app, "/endpoints/", "/", getPaths);
+require("./endpoints/sitemap").createSites(getPaths); // Make the sitemap at '/sitemap'
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}`);
