@@ -36,7 +36,8 @@ function addEndpoints(app, startPath, mountPath) {
 				else {
 					// Add this javascript file as an endpoint
 					const mod = require("." + itemPath);
-					const endpointPath = mountPath + relativePath.substring(0, relativePath.indexOf("."));
+					const filename = relativePath.substring(0, relativePath.indexOf("."))
+					const endpointPath = filename == "index" ? mountPath : mountPath + filename;
 
 					if (mod.get != null) {
 						console.log(endpointPath);
