@@ -48,9 +48,11 @@
 						<label for="skillSelect">Skills</label>
 							<label for="addSkill">
 								<select id="skillSelect" name="skillSelect" required>
-									<option value="skill1">Skill 1</option>
-									<option value="skill2">Skill 2</option>
-									<option value="skill3">Skill 3</option>
+									<!-- Creates the skill select dropdown -->
+									<% const skillModule = require("../../data/skills.js") %>
+									<% skillModule.skills.forEach(function(skill) { %>
+										<option value="<%=skill.id%>"><%=skill.name%></option>
+									<% }) %>
 								</select>
 							</label>
 							<button type="button" id="addSkill" onclick="userprefsAddSkill()">Add Skill</button>
@@ -61,10 +63,14 @@
 									<th>Skill</th>
 									<th>Actions</th>
 								</tr>
-								<tr id="skill2">
-									<td>Skill 2</td>
-									<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('skill2')">Remove</button></td>
-								</tr>
+								<!-- Creates the already chosen skills -->
+								<% chosenSkills.forEach(function(id) { %>
+								<%		const skill = skillModule.skillsMap[id] %>
+										<tr id="<%=id%>">
+											<td><%=skill.name%></td>
+											<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%=id%>')">Remove</button></td>
+										</tr>
+								<% }) %>
 							</table>
 						<label for="preferences">Preferences</label>
 							<textarea type="" id="preferences" name="preferences" maxlength="500"><%=preferences%></textarea>

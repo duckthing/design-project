@@ -4,20 +4,6 @@ let data = {
 	address2: "",
 	city: "Houston",
 	state: "TX",
-	allSkills: [
-		{
-			id: "moving",
-			name: "Moving",
-		},
-		{
-			id: "misc",
-			name: "Miscellaneous",
-		},
-		{
-			id: "moving",
-			name: "Moving",
-		},
-	],
 	chosenSkills: [
 		"moving"
 	],
