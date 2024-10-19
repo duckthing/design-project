@@ -27,6 +27,14 @@
 						<label for="urgent">Urgent?</label>
 							<input type="checkbox" id="urgent" name="urgent">
 							<br>
+							<!-- Creates the skill select dropdown -->
+						<label for="skillRequired">Skill needed</label>
+						<select id="skillRequired" name="skillRequired" required>
+						<% const skillModule = require("../../data/skills.js") %>
+						<% skillModule.skills.forEach(function(skill) { %>
+							<option value="<%=skill.id%>"><%=skill.name%></option>
+						<% }) %>
+						</select>
 						<h3>Location</h3>
 						<label for="address">Address</label>
 							<input type="text" id="address" name="address" maxlength="100" required>
