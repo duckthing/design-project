@@ -1,3 +1,4 @@
+<!-- views/pages/organizer/volunteer-history.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,28 +7,33 @@
     <title>Volunteer History</title>
     <link rel="stylesheet" href="/css/history.css">
 </head>
-
 <body>
   <div class="container">
-    <h2>Volunteer History</h2>
-
-    <table id="volunteer-history">
-      <thead>
-        <tr>
-          <th>Event Name</th>
-          <th>Event Date</th>
-          <th>Required Skills</th>
-          <th>Urgency</th>
-          <th>Location</th>
-          <th>Participation Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Dynamic Javascript Events -->
-      </tbody>
-    </table>
+      <h1>Your Volunteer History</h1>
+      <table id="volunteer-history">
+          <thead>
+              <tr>
+                  <th>Event Name</th>
+                  <th>Date</th>
+                  <th>Required Skills</th>
+                  <th>Urgency</th>
+                  <th>Location</th>
+                  <th>Status</th>
+              </tr>
+          </thead>
+          <tbody>
+              <% events.forEach(function(event) { %>
+              <tr>
+                  <td><%= event.eventName %></td>
+                  <td><%= event.date %></td>
+                  <td><%= event.requiredSkills %></td>
+                  <td><%= event.urgency %></td>
+                  <td><%= event.location %></td>
+                  <td class="<%= event.status.toLowerCase().replace(' ', '-') %>"><%= event.status %></td>
+              </tr>
+              <% }) %>
+          </tbody>
+      </table>
   </div>
-
-  <script src="/js/volunteer-history.js"></script>
 </body>
 </html>
