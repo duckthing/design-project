@@ -14,12 +14,14 @@ class UserAccount {
 }
 
 // userAccounts[username] = UserAccount
-let userAccounts = {}
+let users = [];
+let userAccounts = {};
 
 function createUserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability) {
 	// TODO: Validate input
 	const account = new UserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability);
 	if (userAccounts[username] == null) {
+		users.push(account);
 		userAccounts[username] = account;
 		return true, account
 	} else {
