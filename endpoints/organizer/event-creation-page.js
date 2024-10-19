@@ -1,7 +1,7 @@
 const events = require("../../src/events");
 
 exports.get = function(req, res) {
-	res.render("./pages/organizer/event-creation-page.ejs", {});
+	res.render("./pages/organizer/event-creation-page.ejs", {require: require});
 }
 
 exports.post = function(req, res) {
@@ -16,6 +16,7 @@ exports.post = function(req, res) {
 	const address = req.body.address;
 	const city = req.body.city;
 	const state = req.body.state;
+	const skillRequired = [req.body.skillRequired]
 
 	const event = events.getEvent(req.body.name);
 	if (event != null) {
@@ -24,6 +25,6 @@ exports.post = function(req, res) {
 		return
 	}
 
-	events.createEvent(name, date, urgent, address, city, state);
+	events.createEvent(name, date, urgent, skillRequired, address, city, state);
 	res.send("Created event");
 }
