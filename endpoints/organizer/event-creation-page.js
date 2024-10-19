@@ -10,8 +10,8 @@ exports.post = function(req, res) {
 		return;
 	}
 
-	const name = req.body.name;
-	const date = req.body.date;
+	const name = req.body.eventName;
+	const date = new Date(req.body.eventDate);
 	const urgent = req.body.urgent;
 	const address = req.body.address;
 	const city = req.body.city;
