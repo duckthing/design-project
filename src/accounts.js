@@ -13,16 +13,14 @@ class UserAccount {
 	}
 }
 
-// usersMap[username] = UserAccount
-let users = [];
-let usersMap = {};
+// userAccounts[username] = UserAccount
+let userAccounts = {}
 
 function createUserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability) {
 	// TODO: Validate input
 	const account = new UserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability);
-	if (usersMap[username] == null) {
-		usersMap[username] = account;
-		users.push(account);
+	if (userAccounts[username] == null) {
+		userAccounts[username] = account;
 		return true, account
 	} else {
 		return false, "Account already exists"
@@ -30,7 +28,7 @@ function createUserAccount(username, password, fullName, address1, address2, cit
 }
 
 function getUserAccount(username) {
-	return usersMap[username];
+	return userAccounts[username];
 }
 
 let data = [
@@ -69,6 +67,5 @@ data.forEach(function(d) {
 	createUserAccount(d.username, d.password, d.fullName, d.address1, d.address2, d.city, d.state, d.skills, d.preferences, d.availability);
 });
 
-exports.users = users;
 exports.createUserAccount = createUserAccount;
 exports.getUserAccount = getUserAccount;
