@@ -1,13 +1,21 @@
-const accountsModule = require("../../src/accounts");
+const notifications = [
+  {
+    id: 'notification1',
+    message: 'You have been assigned to the "Beach Cleanup" event on 12-30-2024.',
+    type: 'New Event'
+  },
+  {
+    id: 'notification2',
+    message: 'The "Catch an Alligator" event starts on Friday.',
+    type: 'Reminder'
+  },
+  {
+    id: 'notification3',
+    message: 'Don\'t forget "Cloudy With a Chance of Meatballs" event starts next week.',
+    type: 'Reminder'
+  }
+];
 
 exports.get = function(req, res) {
-	if (req.session.user) {
-		const account = accountsModule.getUserAccount(req.session.user.username);
-		res.render("./pages/user/notifications.ejs", {
-			user: account,
-			require: require
-		});
-	} else {
-		res.redirect("/login");
-	}
-}
+  res.json(notifications);
+};

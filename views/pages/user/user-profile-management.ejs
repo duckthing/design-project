@@ -1,89 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="/css/example.css">
-		<title>Manage User Profile</title>
-		<script src="/js/userprefs-manage-skills.js"></script>
-	</head>
-	<body>
-		<%- include("../../components/navbar.ejs") %>
-		<div class="center">
-			<article>
-				<h1>Update your profile</h1>
-				<!-- Personal info -->
-				<div class="panelblock">
-					<h2>Personal information</h2>
-					<form>
-						<label for="fullName">Full name</label>
-							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%=user.fullName%>" required>
-							<br>
-						<label for="address1">Address 1</label>
-							<input type="text" id="address1" name="address1" maxlength="100" value="<%=user.address1%>" required>
-							<br>
-						<label for="address2">Address 2</label>
-							<input type="text" id="address2" name="address2" maxlength="100" value="<%=user.address2%>">
-							<br>
-						<label for="city">City</label>
-							<input type="text" id="city" name="city" maxlength="100" value="<%=user.city%>" required>
-							<br>
-						<label for="state">State</label>
-							<select id="state" name="state">
-								<% const stateModule = require("../../data/states.js") %>
-								<% for (i = 0; i < stateModule.stateCodes.length; i++) { %>
-									<% const currStateCode = stateModule.stateCodes[i]; %>
-									<% const currStateName = stateModule.states[i]; %>
-									<% if (currStateCode == user.state) { %>
-										<option selected value=<%= currStateCode %>><%= currStateName %></option>
-									<% } else { %>
-										<option value=<%= currStateCode %>><%= currStateName %></option>
-									<% } %>
-								<% } %>
-								
-							</select>
-							<br>
-					<br>
-					<h2>Volunteer preferences</h2>
-					<form>
-						<label for="skillSelect">Skills</label>
-							<label for="addSkill">
-								<select id="skillSelect" name="skillSelect" required>
-									<!-- Creates the skill select dropdown -->
-									<% const skillModule = require("../../data/skills.js") %>
-									<% skillModule.skills.forEach(function(skill) { %>
-										<option value="<%=skill.id%>"><%=skill.name%></option>
-									<% }) %>
-								</select>
-							</label>
-							<button type="button" id="addSkill" onclick="userprefsAddSkill()">Add Skill</button>
-							<br>
-							<!-- Where the skills get added -->
-							<table id="selectedSkillTable" class="multiselect">
-								<tr>
-									<th>Skill</th>
-									<th>Actions</th>
-								</tr>
-								<!-- Creates the already chosen skills -->
-								<% user.skills.forEach(function(id) { %>
-								<%		const skill = skillModule.skillsMap[id] %>
-										<tr id="<%=id%>">
-											<td><%=skill.name%></td>
-											<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%=id%>')">Remove</button></td>
-										</tr>
-								<% }) %>
-							</table>
-						<label for="preferences">Preferences</label>
-							<textarea type="" id="preferences" name="preferences" maxlength="500"><%=user.preferences%></textarea>
-							<br>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/css/example.css">
+        <title>Manage User Profile</title>
+        <script src="/js/userprefs-manage-skills.js"></script>
+    </head>
+    <body>
+        <%- include("../../components/navbar.ejs") %>
 
-						<!-- TODO: Make it so you can add more dates -->
-						<label for="availability">Availability</label>
-							<input type="date" id="availability" name="availability" maxlength="100" required>
-							<br>
-						<input type="submit" value="Update information">
-					</form>
-				</div>
-			</article>
-		</div>
-	</body>
+        <div class="center">
+            <article>
+                <h1>Update your profile</h1>
+                <div class="panelblock">
+                    <h2>Personal information</h2>
+                    <form action="/user/user-profile-management" method="POST">
+                        <!-- Personal Information Section -->
+                        <label for="fullName">Full name</label>
+                        <input type="text" id="fullName" name="fullName" maxlength="50" value="<%=user.fullName%>" required>
+                        <br>
+                        <label for="address1">Address 1</label>
+                        <input type="text" id="address1" name="address1" maxlength="100" value="<%=user.address1%>" required>
+                        <br>
+                        <label for="address2">Address 2</label>
+                        <input type="text" id="address2" name="address2" maxlength="100" value="<%=user.address2%>">
+                        <br>
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" maxlength="100" value="<%=user.city%>" required>
+                        <br>
+                        <label for="state">State</label>
+                        <select id="state" name="state" required>
+                            <%- const stateModule = require("../../data/states.js") %>
+                            <%- for (let i = 0; i < stateModule.stateCodes.length; i++) { %>
+                                <%- const currStateCode = stateModule.stateCodes[i]; %>
+                                <%- const currStateName = stateModule.states[i]; %>
+                                <%- if (currStateCode == user.state) { %>
+                                    <option selected value="<%= currStateCode %>"><%= currStateName %></option>
+                                <%- } else { %>
+                                    <option value="<%= currStateCode %>"><%= currStateName %></option>
+                                <%- } %>
+                            <%- } %>
+                        </select>
+                        <br>
+
+                        <!-- Volunteer Preferences Section -->
+                        <h2>Volunteer preferences</h2>
+                        <label for="skillSelect">Skills</label>
+                        <select id="skillSelect" name="skillSelect" multiple required>
+                            <%- const skillModule = require("../../data/skills.js") %>
+                            <%- skillModule.skills.forEach(function(skill) { %>
+                                <option value="<%= skill.id %>"><%= skill.name %></option>
+                            <%- }) %>
+                        </select>
+                        <br>
+
+                        <!-- Display Chosen Skills -->
+                        <table id="selectedSkillTable" class="multiselect">
+                            <tr>
+                                <th>Skill</th>
+                                <th>Actions</th>
+                            </tr>
+                            <!-- Display already selected skills -->
+                            <%- user.skills.forEach(function(id) { %>
+                                <%- const skill = skillModule.skillsMap[id]; %>
+                                <tr id="<%= id %>">
+                                    <td><%= skill.name %></td>
+                                    <td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%= id %>')">Remove</button></td>
+                                </tr>
+                            <%- }) %>
+                        </table>
+                        <br>
+
+                        <label for="preferences">Preferences</label>
+                        <textarea id="preferences" name="preferences" maxlength="500"><%=user.preferences%></textarea>
+                        <br>
+
+                        <label for="availability">Availability</label>
+                        <input type="date" id="availability" name="availability" value="<%=user.availability%>" maxlength="100" required>
+                        <br>
+
+                        <!-- Submit button -->
+                        <input type="submit" value="Update information">
+                    </form>
+                </div>
+            </article>
+        </div>
+    </body>
 </html>
