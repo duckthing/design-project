@@ -1,5 +1,8 @@
 const fs = require("fs");
 const express = require("express");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+
 const app = express();
 const port = 8080;
 
@@ -8,6 +11,15 @@ app.use(express.static("static"));
 app.use("/css", express.static("www/css"));
 app.use("/img", express.static("www/img"));
 app.use("/js", express.static("www/js"));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+	session({
+		secret: 'your-secret-key',
+		resave: false,
+		saveUninitialized: false,
+	})
+);
 
 let getPaths = []; // For creating the sitemap
 function addEndpoints(app, startPath, mountPath) {
@@ -44,9 +56,10 @@ function addEndpoints(app, startPath, mountPath) {
 						app.get(endpointPath, mod.get);
 						getPaths.push(endpointPath);
 					}
-
+					
 					if (mod.post != null) {
-						app.post(endpointPath, mod.get);
+						console.log("POST: " + endpointPath);
+						app.post(endpointPath, mod.post);
 					}
 
 					/*
