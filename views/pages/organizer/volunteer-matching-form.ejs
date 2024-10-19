@@ -16,22 +16,16 @@
 					<th>Event</th>
 					<th>Actions</th>
 				</tr>
-				<tr>
-					<td><a href="/user/user-profile-management">John Doe</a></td>
-					<td>Event 1</td>
-					<td class="eventActions">
-						<button class="accept">Assign</button>
-						<button>Ignore</button>
-					</td>
-				</tr>
-				<tr>
-					<td><a href="/user/user-profile-management">Jane Doe</a></td>
-					<td>Event 2</td>
-					<td class="eventActions">
-						<button class="accept">Assign</button>
-						<button>Ignore</button>
-					</td>
-				</tr>
+				<% matches.forEach(function(match) { %>
+					<tr>
+						<td><a href="/user/user-profile-management"><%=match.user.fullName%></a></td>
+						<td><%=match.event.name%></td>
+						<td class="eventActions">
+							<button class="accept">Assign</button>
+							<button>Ignore</button>
+						</td>
+					</tr>
+				<% }) %>
 			</table>
 		</section>
 	</body>
