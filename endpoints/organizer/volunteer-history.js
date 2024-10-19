@@ -1,3 +1,7 @@
 exports.get = function(req, res) {
-	res.render("./pages/organizer/volunteer-history.ejs", {});
+	if (req.session.organizer) {
+		res.render("./pages/organizer/volunteer-history.ejs", {});
+	} else {
+		res.redirect("/login");
+	}
 }

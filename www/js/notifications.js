@@ -64,7 +64,7 @@ function checkRemaining() {
 
     const homeButton = document.getElementById('home-page');
     homeButton.addEventListener('click', function() {
-      window.location.href = './index.html';
+      window.location.href = '/';
     });
 
   }

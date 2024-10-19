@@ -1,7 +1,11 @@
 const events = require("../../src/events");
 
 exports.get = function(req, res) {
-	res.render("./pages/organizer/event-creation-page.ejs", {require: require});
+	if (req.session.organizer) {
+		res.render("./pages/organizer/event-creation-page.ejs", {require: require});
+	} else {
+		res.redirect("/login");
+	}
 }
 
 exports.post = function(req, res) {
