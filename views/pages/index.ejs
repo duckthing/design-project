@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/css/style.css"> <!-- Correct CSS Path -->
-	<title>Volunteer Management System</title>
-</head>
-<body>
-	<nav id="main-nav">
-		<div class="nav-header">
-			<button class="nav-toggle" id="nav-toggle-btn">&#9776;</button>
-		</div>
-		<div class="nav-links" id="nav-links">
-			<a class="nav-link" href="/">Home</a> <!-- Go to Home Page -->
-			<a class="nav-link" href="/user-profile-management">Profile</a> <!-- Profile -->
-			<a class="nav-link" href="/notifications">Notifications</a> <!-- Notifications -->
-			<a class="nav-link" href="/volunteer-history">History</a> <!-- History -->
-		</div>
-	</nav>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="./css/style.css">
+		<title>Volunteer Management System</title>
+	</head>
+	<body>
+		<nav id="main-nav">
+			<div class="nav-header">
+				<button class="nav-toggle" id="nav-toggle-btn">&#9776;</button>
+			</div>
+			<div class="nav-links" id="nav-links">
+				<a class="nav-link" href="/">Home</a>
+				<a class="nav-link" href="/login">Log in</a>
+				<a class="nav-link" href="/user/notifications">Notifications</a>
+				<a class="nav-link" href="/organizer/volunteer-history">History</a>
+			</div>
+		</nav>
+		
+		<header id="hero-section">
+			<img id="hero-image" src="./img/volunteer1.jpg" alt="Our Impact Image" class="impact-image">
 
-	<header id="hero-section">
-		<img id="hero-image" src="/img/volunteer1.jpg" alt="Our Impact Image" class="impact-image"> <!-- Correct Image Path -->
+			<div class="hero-content">
+				<h1> Make a Difference in Your Community</h1>
+				<p>Join our platform and start volunteering</p>
+				<a href="/organizer/volunteer-matching-form" class="cta-button">Find Opportunities</a>
+			</div>
+		</header>
 
-		<div class="hero-content">
-			<h1> Make a Difference in Your Community</h1>
-			<p>Join our platform and start volunteering</p>
-			<a href="/volunteer-matching-form" class="cta-button">Find Opportunities</a> <!-- Volunteer Form -->
-		</div>
-	</header>
-
-	<section id="featured-opportunities">
-		<h2>Featured Volunteer Opportunities</h2>
-		<div class="opportunity-list">
-			<div class="opportunity">
-				<h3>Beach Cleanup</h3>
-				<p>Help us clean up our beaches on October 1, 2024. Make a difference!</p>
-				<a href="/beach-cleanup-details" class="cta-button">Learn More</a> <!-- Corrected Path -->
+		<section id="featured-opportunities">
+			<h2>Featured Volunteer Opportunities</h2>
+			<div class="opportunity-list">
+				<div class="opportunity">
+					<h3>Beach Cleanup</h3>
+						<p>Help us clean up our beaches on October 1, 2024. Make a difference!</p>
+						<a href="./beach-cleanup-details" class="cta-button">Learn More</a>
+				</div>
+	
+				<div class="opportunity">
+					<h3>Community Garden</h3>
+						<p>Volunteer at our community garden and help grow food for those in need.</p>
+						<a href="./community-garden-details" class="cta-button">Learn More</a>
+				</div>
 			</div>
 
 			<div class="opportunity">
@@ -70,11 +77,11 @@
 		</div>
 	</section>
 
-	<footer id="main-footer">
-		<h2>Ready to Volunteer?</h2>
-		<p>Sign up and start making a difference today!</p>
-		<a href="/signup" class="cta-button">Sign Up</a> <!-- Sign Up -->
-	</footer>
+		<footer id="main-footer">
+			<h2>Ready to Volunteer?</h2>
+			<p>Sign up and start making a difference today!</p>
+			<button href="/register" id="footer-button">Sign Up</button>
+		</footer>
 
 	<script src="/js/menu.js"></script>
 </body>

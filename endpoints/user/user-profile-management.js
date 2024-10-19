@@ -1,31 +1,13 @@
-let data = {
-	fullName: "John Doe",
-	address1: "123 Real Street",
-	address2: "",
-	city: "Houston",
-	state: "TX",
-	allSkills: [
-		{
-			id: "moving",
-			name: "Moving",
-		},
-		{
-			id: "misc",
-			name: "Miscellaneous",
-		},
-		{
-			id: "moving",
-			name: "Moving",
-		},
-	],
-	chosenSkills: [
-		"moving"
-	],
-	preferences: "No preferences",
-	availability: "01/02/2024"
-};
-
+const accountsModule = require("../../src/accounts")
 
 exports.get = function(req, res) {
-	res.render("./pages/user/user-profile-management.ejs", data);
+	if (req.session.user) {
+		const account = accountsModule.getUserAccount(req.session.user.username);
+		res.render("./pages/user/user-profile-management.ejs", {
+			user: account,
+			require: require
+		});
+	} else {
+		res.redirect("/login");
+	}
 }

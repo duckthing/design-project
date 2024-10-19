@@ -1,6 +1,9 @@
 const fs = require("fs");
 const express = require("express");
 const path = require("path");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+
 const app = express();
 const port = 8080;
 
@@ -33,6 +36,14 @@ app.get('/notifications', (req, res) => {
 app.get('/volunteer-history', (req, res) => {
   res.render('organizer/volunteer-history', {});
 });
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+	session({
+		secret: 'your-secret-key',
+		resave: false,
+		saveUninitialized: false,
+	})
+);
 
 let getPaths = []; // For creating the sitemap
 function addEndpoints(app, startPath, mountPath) {
@@ -61,16 +72,18 @@ function addEndpoints(app, startPath, mountPath) {
 				else {
 					// Add this javascript file as an endpoint
 					const mod = require("." + itemPath);
-					const endpointPath = mountPath + relativePath.substring(0, relativePath.indexOf("."));
+					const filename = relativePath.substring(0, relativePath.indexOf("."))
+					const endpointPath = filename == "index" ? mountPath : mountPath + filename;
 
 					if (mod.get != null) {
 						console.log(endpointPath);
 						app.get(endpointPath, mod.get);
 						getPaths.push(endpointPath);
 					}
-
+					
 					if (mod.post != null) {
-						app.post(endpointPath, mod.get);
+						console.log("POST: " + endpointPath);
+						app.post(endpointPath, mod.post);
 					}
 
 					/*

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/example.css"> <!-- Same CSS as original -->
+    <title>Login Page</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/login.html">Login</a>
+    </nav>
+    
+    <div class="center">
+        <article>
+            <h1>Login</h1>
+            <form action="/login" method="post">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+                <br>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <input type="submit" value="Login">
+            </form>
+
+            <br><br>
+            <h2>Don't have an account?</h2>
+            <button onclick="window.location.href='/register';">Register Here</button> <!-- Redirect to Registration Page -->
+        </article>
+    </div>
+</body>
+</html>
