@@ -16,16 +16,16 @@
 					<h2>Personal information</h2>
 					<form>
 						<label for="fullName">Full name</label>
-							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%=fullName%>" required>
+							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%=user.fullName%>" required>
 							<br>
 						<label for="address1">Address 1</label>
-							<input type="text" id="address1" name="address1" maxlength="100" value="<%=address1%>" required>
+							<input type="text" id="address1" name="address1" maxlength="100" value="<%=user.address1%>" required>
 							<br>
 						<label for="address2">Address 2</label>
-							<input type="text" id="address2" name="address2" maxlength="100" value="<%=address2%>">
+							<input type="text" id="address2" name="address2" maxlength="100" value="<%=user.address2%>">
 							<br>
 						<label for="city">City</label>
-							<input type="text" id="city" name="city" maxlength="100" value="<%=city%>" required>
+							<input type="text" id="city" name="city" maxlength="100" value="<%=user.city%>" required>
 							<br>
 						<label for="state">State</label>
 							<select id="state" name="state">
@@ -33,7 +33,7 @@
 								<% for (i = 0; i < stateModule.stateCodes.length; i++) { %>
 									<% const currStateCode = stateModule.stateCodes[i]; %>
 									<% const currStateName = stateModule.states[i]; %>
-									<% if (currStateCode == state) { %>
+									<% if (currStateCode == user.state) { %>
 										<option selected value=<%= currStateCode %>><%= currStateName %></option>
 									<% } else { %>
 										<option value=<%= currStateCode %>><%= currStateName %></option>
@@ -64,7 +64,7 @@
 									<th>Actions</th>
 								</tr>
 								<!-- Creates the already chosen skills -->
-								<% chosenSkills.forEach(function(id) { %>
+								<% user.skills.forEach(function(id) { %>
 								<%		const skill = skillModule.skillsMap[id] %>
 										<tr id="<%=id%>">
 											<td><%=skill.name%></td>
@@ -73,7 +73,7 @@
 								<% }) %>
 							</table>
 						<label for="preferences">Preferences</label>
-							<textarea type="" id="preferences" name="preferences" maxlength="500"><%=preferences%></textarea>
+							<textarea type="" id="preferences" name="preferences" maxlength="500"><%=user.preferences%></textarea>
 							<br>
 
 						<!-- TODO: Make it so you can add more dates -->
