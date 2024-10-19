@@ -1,4 +1,3 @@
-const path = require('path');
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
@@ -8,7 +7,6 @@ const app = express();
 const port = 8080;
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views/pages'));
 app.use(express.static("static"));
 app.use("/css", express.static("www/css"));
 app.use("/img", express.static("www/img"));
@@ -22,27 +20,6 @@ app.use(
 		saveUninitialized: false,
 	})
 );
-
-app.get('/', (req, res) => {
-  res.render('index'); // Renders index.ejs
-});
-
-app.get('/volunteer-history', (req, res) => {
-  res.render('organizer/volunteer-history'); // Renders volunteer-history.ejs
-});
-
-app.get('/notifications', (req, res) => {
-  res.render('user/notifications'); // Renders notifications.ejs
-});
-
-// Serve API data for front-end
-const volunteerHistoryAPI = require('./endpoints/organizer/volunteer-history');
-const notificationsAPI = require('./endpoints/user/notifications');
-
-app.get('/api/volunteerData', volunteerHistoryAPI.get);
-app.get('/api/notifications', notificationsAPI.get);
-
-
 
 let getPaths = []; // For creating the sitemap
 function addEndpoints(app, startPath, mountPath) {
