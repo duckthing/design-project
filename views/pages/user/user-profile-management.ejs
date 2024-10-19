@@ -14,7 +14,7 @@
 				<!-- Personal info -->
 				<div class="panelblock">
 					<h2>Personal information</h2>
-					<form>
+					<form method="post">
 						<label for="fullName">Full name</label>
 							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%=user.fullName%>" required>
 							<br>
@@ -78,12 +78,32 @@
 
 						<!-- TODO: Make it so you can add more dates -->
 						<label for="availability">Availability</label>
-							<input type="date" id="availability" name="availability" maxlength="100" required>
+							<input type="date" id="availability" name="availability" maxlength="100" value="<%=user.availability.toISOString().substr(0, 10)%>" required>
 							<br>
 						<input type="submit" value="Update information">
 					</form>
 				</div>
 			</article>
 		</div>
+		<script>
+			console.log("runnning")
+			document.querySelector("form").addEventListener('formdata', (e) => {
+				e.preventDefault();
+				const formData = e.formData; 
+
+				const skillTable = document.getElementById("selectedSkillTable").children[0];
+				const skills = [];
+				for (i = 0; i < skillTable.children.length; i++) {
+					const row = skillTable.children[i];
+					if (row.id != null && row.id != "") {
+						console.log(row.id);
+						skills.push(row.id);
+					}
+				}
+				formData.append("skills", skills);
+				console.log(skills);
+				console.log(formData);
+			});
+		</script>
 	</body>
 </html>

@@ -46,7 +46,7 @@ let userData = [
 			"moving"
 		],
 		preferences: "No preferences",
-		availability: "01/02/2024",
+		availability: new Date(2024, 1, 1),
 	},
 	{
 		username: "user",
@@ -61,7 +61,7 @@ let userData = [
 			"moving",
 		],
 		preferences: "No preferences",
-		availability: "01/02/2024",
+		availability: new Date(2024, 1, 2),
 	},
 ];
 
