@@ -22,7 +22,8 @@ exports.post = function(req, res) {
 		const state = req.body.state;
 		const skills = []; // Not provided, so initialize as an empty array
 		const preferences = req.body.preferences;
-		const availability = req.body.availability;
+		const availability = new Date();
+		console.log(availability)
 
 		let success, account = accountsModule.createUserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability);
 		req.session.user = {username: req.body.username};
