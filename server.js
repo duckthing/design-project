@@ -1,5 +1,6 @@
 const fs = require("fs");
 const express = require("express");
+const path = require("path");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 
@@ -7,11 +8,34 @@ const app = express();
 const port = 8080;
 
 app.set('view engine', 'ejs');
-app.use(express.static("static"));
+app.set('views', path.join(__dirname, 'views/pages'));
+app.use(express.static(path.join(__dirname, 'static')));
 app.use("/css", express.static("www/css"));
 app.use("/img", express.static("www/img"));
 app.use("/js", express.static("www/js"));
 
+app.get('/', (req, res) => {
+  res.render('index', {});
+});
+
+const volunteerHistoryAPI = require('./endpoints/organizer/volunteer-history');
+const notificationsAPI = require('./endpoints/user/notifications');
+
+
+
+// Serve API data for front-end (volunteer data)
+app.get('/api/volunteerData', volunteerHistoryAPI.get);
+
+// Serve API data for front-end (notifications)
+app.get('/api/notifications', notificationsAPI.get);
+
+
+app.get('/notifications', (req, res) => {
+  res.render('user/notifications', {});
+});
+app.get('/volunteer-history', (req, res) => {
+  res.render('organizer/volunteer-history', {});
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
 	session({

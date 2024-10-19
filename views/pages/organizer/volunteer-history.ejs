@@ -6,28 +6,32 @@
     <title>Volunteer History</title>
     <link rel="stylesheet" href="/css/history.css">
 </head>
-
 <body>
-  <div class="container">
-    <h2>Volunteer History</h2>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/volunteer-history">Volunteer History</a>
+    </nav>
 
-    <table id="volunteer-history">
-      <thead>
-        <tr>
-          <th>Event Name</th>
-          <th>Event Date</th>
-          <th>Required Skills</th>
-          <th>Urgency</th>
-          <th>Location</th>
-          <th>Participation Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Dynamic Javascript Events -->
-      </tbody>
-    </table>
-  </div>
+    <div class="container">
+        <h1>Your Volunteer History</h1>
+        <table id="volunteer-history">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Required Skills</th>
+                    <th>Urgency</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Volunteer data will be dynamically inserted here by volunteer-history.js -->
+            </tbody>
+        </table>
+    </div>
 
-  <script src="/js/volunteer-history.js"></script>
+    <!-- Correct script tag with full path -->
+    <script src="/js/volunteer-history.js"></script>
 </body>
 </html>
