@@ -6,7 +6,6 @@ exports.get = function(req, res) {
 }
 
 exports.post = function(req, res) {
-	console.log("got it")
 	if (req.body == null || req.body.username == null || req.body.password == null) {
 		res.send("Invalid data");
 		return;
@@ -14,12 +13,10 @@ exports.post = function(req, res) {
 	const account = accountsModule.getUserAccount(req.body.username);
 	if (account == null) {
 		res.send("Invalid username");
-		console.log("Invalid username: " + req.body.username);
 		return;
 	}
 	if (account.password != req.body.password.trim()) {
 		res.send("Invalid password");
-		console.log("Invalid password");
 		return;
 	}
 	req.session.user = {username: req.body.username};
