@@ -21,6 +21,17 @@ app.use(
 	})
 );
 
+app.get('/volunteer-history', (req, res) => {
+  const volunteerHistory = require('./endpoints/organizer/volunteer-history');
+  volunteerHistory.get(req, res);
+});
+
+const notificationsAPI = require('./endpoints/user/notifications');
+app.get('/notifications', notificationsAPI.get);
+
+
+
+
 let getPaths = []; // For creating the sitemap
 function addEndpoints(app, startPath, mountPath) {
 	// Recursively go through the startPath (./api/) directory and
