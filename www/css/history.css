@@ -46,6 +46,32 @@ h2 {
   background-color: #f1f1f1;
 }
 
+#home-page {
+  display: inline-block;
+  text-align: center;
+  margin-top: 12px;
+  max-width: 150px;
+  padding: 0.75em 1.5em;
+  background-color: #969494;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#home-page:link,
+#home-page:visited {
+  color: white;
+}
+
+#home-page:hover {
+  background-color: #3a3838;
+  transform: scale(1.05);
+}
+
 /* Participation Status Colors */
 td:last-child {
   font-weight: bold;
