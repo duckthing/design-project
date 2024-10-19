@@ -19,5 +19,5 @@ node ./server.js
 
 To find any link you can access, visit the sitemap:
 ```
-localhost:3000/sitemap
+localhost:8080/sitemap
 ```
