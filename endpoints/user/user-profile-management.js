@@ -6,7 +6,7 @@ exports.get = function(req, res) {
         if (!account) {
             return res.redirect("/login");  // Handle case where account is not found
         }
-        res.render("pages/user/user-profile-management", { user: account });
+        res.render("pages/user/user-profile-management", { user: account, require: require });
     } else {
         res.redirect("/login");
     }

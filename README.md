@@ -21,3 +21,21 @@ To find any link you can access, visit the sitemap:
 ```
 localhost:8080/sitemap
 ```
+
+# Usage
+## Navigating
+Most of the links you have access to depend on what type of account you're logged into.
+Use the navigation bar to see other pages.
+
+## Default accounts
+Use the normal login page for both user and organizer accounts.
+
+For users:
+* Username: user
+	* Password: user
+* Username: john
+	* Password: john
+
+For organizer:
+* Username: organizer
+	* Password: organizer

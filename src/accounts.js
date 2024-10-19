@@ -14,12 +14,14 @@ class UserAccount {
 }
 
 // userAccounts[username] = UserAccount
-let userAccounts = {}
+let users = [];
+let userAccounts = {};
 
 function createUserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability) {
 	// TODO: Validate input
 	const account = new UserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability);
 	if (userAccounts[username] == null) {
+		users.push(account);
 		userAccounts[username] = account;
 		return true, account
 	} else {
@@ -31,7 +33,7 @@ function getUserAccount(username) {
 	return userAccounts[username];
 }
 
-let data = [
+let userData = [
 	{
 		username: "john",
 		password: "john",
@@ -63,9 +65,50 @@ let data = [
 	},
 ];
 
-data.forEach(function(d) {
+userData.forEach(function(d) {
 	createUserAccount(d.username, d.password, d.fullName, d.address1, d.address2, d.city, d.state, d.skills, d.preferences, d.availability);
 });
 
+class OrganizerAccount {
+	constructor(username, password) {
+		this.username = username;
+		this.password = password;
+	}
+}
+
+let organizers = [];
+let organizerMap = {};
+
+function createOrganizerAccount(username, password) {
+	// TODO: Validate input
+	const account = new OrganizerAccount(username, password);
+	if (organizerMap[username] == null) {
+		organizerMap[username] = account;
+		organizers.push(account);
+		return true, account
+	} else {
+		return false, "Account already exists"
+	}
+}
+
+function getOrganizerAccount(username) {
+	return organizerMap[username];
+}
+
+let organizerData = [
+	{
+		username: "organizer",
+		password: "organizer"
+	}
+];
+
+organizerData.forEach(function(d) {
+	createOrganizerAccount(d.username, d.password);
+});
+
+exports.users = users;
 exports.createUserAccount = createUserAccount;
 exports.getUserAccount = getUserAccount;
+exports.organizers = organizers;
+exports.createOrganizerAccount = createOrganizerAccount;
+exports.getOrganizerAccount = getOrganizerAccount;

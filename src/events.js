@@ -22,5 +22,6 @@ function getEvent(name) {
 	return eventsMap[name];
 }
 
+exports.events = events;
 exports.createEvent = createEvent;
 exports.getEvent = getEvent;
