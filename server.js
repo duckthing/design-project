@@ -2,6 +2,9 @@ const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const accountsModule = require('./src/accounts.js');
+const stateModule = require('./data/states.js');
+const skillModule = require('./data/skills.js');
 
 const app = express();
 const port = 8080;
@@ -21,15 +24,60 @@ app.use(
 	})
 );
 
-app.get('/volunteer-history', (req, res) => {
-  const volunteerHistory = require('./endpoints/organizer/volunteer-history');
-  volunteerHistory.get(req, res);
+app.get('/', (req, res) => {
+	res.render('pages/index', { session: req.session });
 });
 
-const notificationsAPI = require('./endpoints/user/notifications');
-app.get('/notifications', notificationsAPI.get);
+
+app.get('/login', (req, res) => {
+	res.render('pages/login', { session: req.session });
+});
+
+const loginAPI = require('./endpoints/login.js');
+app.post('/login', loginAPI.post);
+
+app.get('/volunteer-history', (req, res) => {
+	if (!req.session.isAuthenticated) {
+		return res.redirect('/login');
+	}
+	const volunteerHistory = require('./endpoints/organizer/volunteer-history');
+	volunteerHistory.get(req, res, req.session);
+});
+
+app.get('/user/user-profile-management', (req, res) => {
+	if (!req.session.isAuthenticated) {
+			return res.redirect('/login');
+	}
 
 
+	const userAccount = accountsModule.getUserAccount(req.session.user.username);
+
+	if (!userAccount) {
+			return res.status(404).send("User not found");
+	}
+
+	res.render('pages/user/user-profile-management', {
+			user: userAccount,
+			stateModule: stateModule,
+			skillModule: skillModule,
+			session: req.session
+		});
+});
+
+
+app.get('/notifications', (req, res) => {
+	if (!req.session.isAuthenticated) {
+		return res.redirect('/login');
+	}
+	const notificationsAPI = require('./endpoints/user/notifications');
+	notificationsAPI.get(req, res);
+});
+
+app.get('/logout', (req, res) => {
+	req.session.destroy(() => {
+		res.redirect('/login');
+	});
+});
 
 
 let getPaths = []; // For creating the sitemap

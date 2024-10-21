@@ -79,7 +79,7 @@ input:focus {
 	background-color: lightblue;
 }
 
-input[type="submit"] {
+input[type="submit"], #redirect-btn {
 	width: 100%;
 	padding: 8px;
 	margin-top: 20px;
@@ -87,11 +87,11 @@ input[type="submit"] {
 	cursor: pointer;
 }
 
-input[type="submit"]:hover {
+input[type="submit"]:hover, #redirect-btn:hover {
 	background-color: darkgray;
 }
 
-input[type="submit"]:active {
+input[type="submit"]:hover, #redirect-btn:active {
 	background-color: gray;
 }
 

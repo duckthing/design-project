@@ -181,8 +181,9 @@ exports.get = function(req, res) {
     return res.status(400).send('Error validating event data: ' + errors.join(', '));
   }
 
-  res.render(path.join(__dirname, '../../views/pages/organizer/volunteer-history'), {
-    events: historyData,
-  });
+  res.render(path.join(__dirname, '../../views/pages/organizer/volunteer-history.ejs'), {
+		events: historyData,
+		session: req.session
+	});
 
 };

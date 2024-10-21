@@ -33,6 +33,14 @@ function getUserAccount(username) {
 	return userAccounts[username];
 }
 
+function validateUserCredentials(username, password) {
+	const account = getUserAccount(username);
+	if (account && account.password === password) {
+		return true;
+	}
+	return false;
+}
+
 let userData = [
 	{
 		username: "john",
@@ -95,6 +103,14 @@ function getOrganizerAccount(username) {
 	return organizerMap[username];
 }
 
+function validateOrganizerCredentials(username, password) {
+	const account = getOrganizerAccount(username);
+	if (account && account.password === password) {
+		return true;
+	}
+	return false;
+}
+
 let organizerData = [
 	{
 		username: "organizer",
@@ -112,3 +128,5 @@ exports.getUserAccount = getUserAccount;
 exports.organizers = organizers;
 exports.createOrganizerAccount = createOrganizerAccount;
 exports.getOrganizerAccount = getOrganizerAccount;
+exports.validateUserCredentials = validateOrganizerCredentials;
+exports.validateOrganizerCredentials = validateOrganizerCredentials;

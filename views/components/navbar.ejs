@@ -1,5 +1,11 @@
 <nav>
 	<a href="/">Home</a>
-	<a href="/user/user-profile-management">Profile</a>
-	<a href="/user/notifications">Notifications</a>
+	<% if (session && session.isAuthenticated) { %>
+			<a href="/user/user-profile-management">Profile</a>
+			<a href="/notifications">Notifications</a>
+			<a href="/volunteer-history">History</a>
+			<a href="/logout">Logout</a>
+	<% } else { %>
+			<a href="/login">Login</a>
+	<% } %>
 </nav>
