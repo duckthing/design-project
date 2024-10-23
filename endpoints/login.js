@@ -1,6 +1,6 @@
 // const accountsModule = require("../src/accounts");
 const bodyParser = require('body-parser');
-const db = require("../src/db");
+const db = require("../src/dbSource");
 
 exports.get = function (req, res) {
 	res.render("./pages/login.ejs", { session: req.session });
