@@ -1,5 +1,6 @@
-const accountsModule = require("../src/accounts");
+// const accountsModule = require("../src/accounts");
 const bodyParser = require('body-parser');
+const db = require("../src/db");
 
 exports.get = function (req, res) {
 	res.render("./pages/login.ejs", { session: req.session });
@@ -10,8 +11,8 @@ exports.post = function (req, res) {
 		return res.status(400).send("Invalid data");
 	}
 
-	const userAccount = accountsModule.getUserAccount(req.body.username);
-	const organizerAccount = accountsModule.getOrganizerAccount(req.body.username);
+	const userAccount = db.getUserByUsername(req.body.username);
+	const organizerAccount = db.getOrganizerByUsername(req.body.username);
 
 	if (userAccount) {
 		// User account exists

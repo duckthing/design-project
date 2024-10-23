@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const accountsModule = require('./src/accounts.js');
 const stateModule = require('./data/states.js');
 const skillModule = require('./data/skills.js');
+const db = require("./src/db.js");
 
 const app = express();
 const port = 8080;
