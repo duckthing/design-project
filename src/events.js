@@ -1,3 +1,6 @@
+const dbSource = require("./dbSource");
+const db = dbSource.db;
+
 class Event {
 	constructor(name, date, urgent, skillsRequired, address, city, state) {
 		this.name = name;
@@ -10,19 +13,30 @@ class Event {
 	}
 }
 
-let events = []
-let eventsMap = {}
-
-function createEvent(name, date, urgent, skillsRequired, address, city, state) {
-	const event = new Event(name, date, urgent, skillsRequired, address, city, state);
-	events.push(event);
-	eventsMap[name] = event;
+const getAllEventsStmt = db.prepare("SELECT * FROM events");
+function getAllEvents() {
+	return getAllEventsStmt.all();
 }
+exports.getAllEvents = getAllEvents;
 
-function getEvent(name) {
-	return eventsMap[name];
+const getFutureEventsStmt = db.prepare("SELECT event_id, event_name, address, city, state_code, urgent, event_date, datetime(event_date, 'unixepoch') AS event_datetime FROM events WHERE event_date > unixepoch()")
+function getFutureEvents() {
+	return getFutureEventsStmt.all();
 }
+exports.getFutureEvents = getFutureEvents;
 
-exports.events = events;
+const createEventStmt = db.prepare("INSERT INTO events(event_name, address, city, state_code, urgent, event_date) VALUES (?, ?, ?, ?, ?, ?)");
+function createEvent(eventName, address, city, stateCode, urgent, eventDate) {
+	// Convert things into SQL values
+	const urgentVal = urgent ? 1 : 0;
+	let eventDateVal;
+	if (typeof eventDate == "date") {
+		// Divide by 1000 to get seconds, not milliseconds
+		eventDateVal = eventDate.getTime() * 0.001;
+	} else {
+		eventDateVal = eventDate;
+	}
+	const info = createEventStmt.run(eventName, address, city, stateCode, urgentVal, eventDateVal);
+	return info;
+}
 exports.createEvent = createEvent;
-exports.getEvent = getEvent;

@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const accountsModule = require('./src/accounts.js');
 const stateModule = require('./data/states.js');
 const skillModule = require('./data/skills.js');
-const db = require("./src/db.js");
+const db = require("./src/dbSource.js");
 
 const app = express();
 const port = 8080;
@@ -24,6 +24,9 @@ app.use(
 		saveUninitialized: false,
 	})
 );
+
+/*
+Endpoints are automatic.
 
 app.get('/', (req, res) => {
 	res.render('pages/index', { session: req.session });
@@ -79,6 +82,7 @@ app.get('/logout', (req, res) => {
 		res.redirect('/login');
 	});
 });
+*/
 
 
 let getPaths = []; // For creating the sitemap
@@ -96,7 +100,7 @@ function addEndpoints(app, startPath, mountPath) {
 		fs.stat("." + itemPath, (err, stat) => {
 			if (err) {
 				// An error occurred reading the file system
-				console.log("Error: " + err);
+				// console.log("Error: " + err);
 			}
 			else {
 				// We have access to this item
@@ -112,13 +116,13 @@ function addEndpoints(app, startPath, mountPath) {
 					const endpointPath = filename == "index" ? mountPath : mountPath + filename;
 
 					if (mod.get != null) {
-						console.log(endpointPath);
+						// console.log(endpointPath);
 						app.get(endpointPath, mod.get);
 						getPaths.push(endpointPath);
 					}
 					
 					if (mod.post != null) {
-						console.log("POST: " + endpointPath);
+						// console.log("POST: " + endpointPath);
 						app.post(endpointPath, mod.post);
 					}
 

@@ -1,3 +1,6 @@
+const dbSource = require("../src/dbSource");
+const db = dbSource.db;
+
 class Skill {
     constructor(id, name) {
         this.id = id;
@@ -5,21 +8,36 @@ class Skill {
     }
 }
 
-let skills = [];
-let skillsMap = {};
+const getSkillFromNameStmt = db.prepare("SELECT * FROM skills WHERE skill_name = ?");
+function getSkillFromName(skillName) {
+	return getSkillFromNameStmt.get(skillName);
+}
+exports.getSkillFromName = getSkillFromName
 
-// List of available skills
-skills.push(new Skill("skill1", "Skill 1"));
-skills.push(new Skill("skill2", "Skill 2"));
-skills.push(new Skill("skill3", "Skill 3"));
-skills.push(new Skill("skill4", "Skill 4"));
-skills.push(new Skill("skill5", "Skill 5"));
-skills.push(new Skill("moving", "Moving"));
-skills.push(new Skill("misc", "Miscellaneous"));
+const getSkillFromIDStmt = db.prepare("SELECT * FROM skills WHERE skill_id = ?");
+function getSkillFromID(skillID) {
+	return getSkillFromIDStmt.get(skillID);
+}
+exports.getSkillFromID = getSkillFromID;
 
-skills.forEach(function(skill) {
-    skillsMap[skill.id] = skill;
-});
+const getAllSkillsStmt = db.prepare("SELECT * FROM skills");
+function getAllSkills() {
+	return getAllSkillsStmt.all();
+}
+exports.getAllSkills = getAllSkills;
 
-exports.skills = skills;
-exports.skillsMap = skillsMap;
+const createNewSkillStmt = db.prepare("INSERT INTO skills(skill_name) VALUES (?)");
+function createNewSkill(skillName) {
+	if (getSkillFromName(skillName) != null) {
+		// Already exists
+		return false, "Skill already exists";
+	} else {
+		const info = createNewSkillStmt.run(skillName);
+		return true, getSkillFromID(info.lastInsertRowId);
+	}
+}
+exports.createNewSkill = createNewSkill;
+
+if (dbSource.databaseJustCreated) {
+	// Create default skills
+}

@@ -16,23 +16,23 @@
 					<h2>Personal information</h2>
 					<form method="post">
 						<label for="fullName">Full name</label>
-							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%=user.fullName%>" required>
+							<input type="text" id="fullName" name="fullName" maxlength="50" value="<%=profile.full_name%>" required>
 							<br>
 						<label for="address1">Address 1</label>
-							<input type="text" id="address1" name="address1" maxlength="100" value="<%=user.address1%>" required>
+							<input type="text" id="address1" name="address1" maxlength="100" value="<%=profile.address1%>" required>
 							<br>
 						<label for="address2">Address 2</label>
-							<input type="text" id="address2" name="address2" maxlength="100" value="<%=user.address2%>">
+							<input type="text" id="address2" name="address2" maxlength="100" value="<%=profile.address2%>">
 							<br>
 						<label for="city">City</label>
-							<input type="text" id="city" name="city" maxlength="100" value="<%=user.city%>" required>
+							<input type="text" id="city" name="city" maxlength="100" value="<%=profile.city%>" required>
 							<br>
 						<label for="state">State</label>
 							<select id="state" name="state">
-								<% for (i = 0; i < stateModule.stateCodes.length; i++) { %>
-									<% const currStateCode = stateModule.stateCodes[i]; %>
-									<% const currStateName = stateModule.states[i]; %>
-									<% if (currStateCode == user.state) { %>
+								<% for (const state of allStates) { %>
+									<% const currStateCode = state.state_code; %>
+									<% const currStateName = state.state_name; %>
+									<% if (currStateCode == profile.state) { %>
 										<option selected value=<%= currStateCode %>><%= currStateName %></option>
 									<% } else { %>
 										<option value=<%= currStateCode %>><%= currStateName %></option>
@@ -48,8 +48,8 @@
 							<label for="addSkill">
 								<select id="skillSelect" name="skillSelect" required>
 									<!-- Creates the skill select dropdown -->
-									<% skillModule.skills.forEach(function(skill) { %>
-										<option value="<%=skill.id%>"><%=skill.name%></option>
+									<% allSkills.forEach(function(skill) { %>
+										<option value="<%=skill.skill_id%>"><%=skill.skill_name%></option>
 									<% }) %>
 								</select>
 							</label>
@@ -62,21 +62,20 @@
 									<th>Actions</th>
 								</tr>
 								<!-- Creates the already chosen skills -->
-								<% user.skills.forEach(function(id) { %>
-								<%		const skill = skillModule.skillsMap[id] %>
-										<tr id="<%=id%>">
-											<td><%=skill.name%></td>
-											<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%=id%>')">Remove</button></td>
+								<% userSkills.forEach(function(skill) { %>
+										<tr id="<%=skill.skill_id%>">
+											<td><%=skill.skill_name%></td>
+											<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%=skill.skill_id%>')">Remove</button></td>
 										</tr>
 								<% }) %>
 							</table>
 						<label for="preferences">Preferences</label>
-							<textarea type="" id="preferences" name="preferences" maxlength="500"><%=user.preferences%></textarea>
+							<textarea type="" id="preferences" name="preferences" maxlength="500"><%=profile.preferences%></textarea>
 							<br>
 
 						<!-- TODO: Make it so you can add more dates -->
 						<label for="availability">Availability</label>
-							<input type="date" id="availability" name="availability" maxlength="100" value="<%=user.availability.toISOString().substr(0, 10)%>" required>
+							<input type="date" id="availability" name="availability" maxlength="100" value="<%# TODO %>" required>
 							<br>
 						<input type="submit" value="Update information">
 					</form>

@@ -2,7 +2,7 @@ PRAGMA foreign_keys = ON;
 PRAGMA journal_mode = WAL;
 
 CREATE TABLE IF NOT EXISTS states (
-    state_code			TEXT PRIMARY KEY,
+    state_code			TEXT PRIMARY KEY NOT NULL,
     state_name			TEXT NOT NULL
 );
 
@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS has_skills (
 
 CREATE TABLE IF NOT EXISTS user_available_at (
 	user_account_id		INTEGER PRIMARY KEY,
-	from_date			REAL NOT NULL,
-	to_date				REAL NOT NULL,
+	from_date			INT NOT NULL,
+	to_date				INT NOT NULL,
 
 	FOREIGN KEY (user_account_id)
 		REFERENCES user_accounts (uesr_account_id)
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS events (
 	city				TEXT NOT NULL,
 	state_code			TEXT NOT NULL,
 	urgent				INTEGER NOT NULL,
-	event_date			REAL NOT NULL,
+	event_date			INT NOT NULL,
 
 	FOREIGN KEY (state_code)
 		REFERENCES states (state_code)

@@ -55,19 +55,19 @@ INSERT INTO states (state_code, state_name)
 			('WI', 'Wisconsin'),
 			('WY', 'Wyoming');
 
-INSERT INTO organizer_accounts (username, password)
-	VALUES ('organizer', 'organizer');
+-- INSERT INTO organizer_accounts (username, password)
+-- 	VALUES ('organizer', 'organizer');
 
-INSERT INTO user_accounts (username, password, full_name, address1, city, state_code, zipcode, preferences)
-	VALUES ('user',
-			'user',
-			'User Name',
-			'123 Real Street',
-			'Houston',
-			'TX',
-			12345,
-			'No preferences');
+-- INSERT INTO user_accounts (username, password, full_name, address1, city, state_code, zipcode, preferences)
+-- 	VALUES ('user',
+-- 			'user',
+-- 			'User Name',
+-- 			'123 Real Street',
+-- 			'Houston',
+-- 			'TX',
+-- 			12345,
+-- 			'No preferences');
 
-INSERT INTO has_skills (skill_id, user_account_id)
-	VALUES	(1, 1),
-			(2, 1);
+-- INSERT INTO has_skills (skill_id, user_account_id)
+-- 	VALUES	(1, 1),
+-- 			(2, 1);
