@@ -25,6 +25,9 @@ app.use(
 	})
 );
 
+/*
+Endpoints are automatic.
+
 app.get('/', (req, res) => {
 	res.render('pages/index', { session: req.session });
 });
@@ -79,6 +82,7 @@ app.get('/logout', (req, res) => {
 		res.redirect('/login');
 	});
 });
+*/
 
 
 let getPaths = []; // For creating the sitemap

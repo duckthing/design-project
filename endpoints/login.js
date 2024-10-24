@@ -1,6 +1,6 @@
 // const accountsModule = require("../src/accounts");
 const bodyParser = require('body-parser');
-const db = require("../src/dbSource");
+const accountsModule = require("../src/accounts");
 
 exports.get = function (req, res) {
 	res.render("./pages/login.ejs", { session: req.session });
@@ -11,8 +11,8 @@ exports.post = function (req, res) {
 		return res.status(400).send("Invalid data");
 	}
 
-	const userAccount = db.getUserByUsername(req.body.username);
-	const organizerAccount = db.getOrganizerByUsername(req.body.username);
+	const userAccount = accountsModule.getUserByUsername(req.body.username);
+	const organizerAccount = accountsModule.getOrganizerByUsername(req.body.username);
 
 	if (userAccount) {
 		// User account exists
@@ -38,10 +38,14 @@ exports.post = function (req, res) {
 		}
 	} else {
 		// No account found
-		res.render('pages/login', { session: req.session, error: 'Invalid username or password' });
-		return res.status(401).send("Invalid username");
+		console.log(`No account exists: ${req.body.username}`);
+		return res.status(401).render('pages/login', { session: req.session, error: 'Invalid username or password' });
 	}
 };
+
+/*
+Make an endpoint for this, not a method.
+'/endpoints/logout' with a get method.
 
 exports.logout = function (req, res) {
 	req.session.destroy((err) => {
@@ -52,3 +56,4 @@ exports.logout = function (req, res) {
 		return res.redirect("/login"); // Redirect users to login after logout
 	})
 }
+*/

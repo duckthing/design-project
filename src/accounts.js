@@ -40,7 +40,7 @@ function getUserSkillsFromUserID(userID) {
 }
 exports.getUserSkillsFromUserID = getUserSkillsFromUserID;
 
-const getUserAvailabilityFromUserIDStmt = db.prepare("SELECT a.from_date, a.to_date FROM user_available_at a");
+const getUserAvailabilityFromUserIDStmt = db.prepare("SELECT a.from_date, a.to_date FROM user_available_at a INNER JOIN user_accounts u ON u.user_account_id = a.user_account_id WHERE u.user_account_id = ?");
 function getUserAvailabilityFromUserID(userID) {
 	return getUserAvailabilityFromUserIDStmt.all(userID);
 }
@@ -104,7 +104,8 @@ function validateOrganizerCredentials(username, password) {
 }
 
 // Default data for the database
-if (db.databaseJustCreated) {
+if (dbSource.databaseJustCreated) {
+	console.log("database just created")
 	let userData = [
 		{
 			username: "john",
@@ -138,7 +139,7 @@ if (db.databaseJustCreated) {
 	];
 	
 	userData.forEach(function(d) {
-		createUserAccount(d.username, d.password, d.fullName, d.address1, d.address2, d.city, d.state, d.skills, d.preferences, d.availability);
+		console.log(createUserAccount(d.username, d.password, d.fullName, d.address1, d.city, d.state, d.zipcode, d.preferences));
 	});
 
 	let organizerData = [

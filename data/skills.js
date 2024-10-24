@@ -8,17 +8,23 @@ class Skill {
     }
 }
 
-const getSkillFromNameStmt = db.prepare();
+const getSkillFromNameStmt = db.prepare("SELECT * FROM skills WHERE skill_name = ?");
 function getSkillFromName(skillName) {
 	return getSkillFromNameStmt.get(skillName);
 }
 exports.getSkillFromName = getSkillFromName
 
-const getSkillFromIDStmt = db.prepare();
+const getSkillFromIDStmt = db.prepare("SELECT * FROM skills WHERE skill_id = ?");
 function getSkillFromID(skillID) {
 	return getSkillFromIDStmt.get(skillID);
 }
 exports.getSkillFromID = getSkillFromID;
+
+const getAllSkillsStmt = db.prepare("SELECT * FROM skills");
+function getAllSkills() {
+	return getAllSkillsStmt.all();
+}
+exports.getAllSkills = getAllSkills;
 
 const createNewSkillStmt = db.prepare("INSERT INTO skills(skill_name) VALUES (?)");
 function createNewSkill(skillName) {
