@@ -23,14 +23,23 @@ exports.post = function(req, res) {
 		const preferences = req.body.preferences;
 		const availability = new Date();
 
-		let success, account = accountsModule.createUserAccount(username, password, fullName, address1, address2, city, state, skills, preferences, availability);
-		req.session.user = {username: req.body.username};
-		res.redirect("user/user-profile-management");
+		let success = accountsModule.createUserAccount(username, password, fullName, "", "", "TX", 0, "");
+		if (success) {
+			req.session.user = {username: req.body.username};
+			res.redirect("user/user-profile-management");
+		} else {
+			// Account is also the error message
+			res.send("Could not create volunteer account: Account already exists");
+		}
 		return;
 	} else if (req.body.role == "admin") {
-		let success, account = accountsModule.createOrganizerAccount(username, password);
-		req.session.organizer = {username: req.body.username};
-		res.redirect("organizer/event-creation-page");
+		let success = accountsModule.createOrganizerAccount(username, password);
+		if (success) {
+			req.session.organizer = {username: req.body.username};
+			res.redirect("organizer/event-creation-page");
+		} else {
+			res.send("Could not create organizer account: Account already exists");
+		}
 		return;
 	} else {
 		res.send("Invalid data");
