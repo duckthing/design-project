@@ -39,6 +39,7 @@ app.get('/login', (req, res) => {
 
 const loginAPI = require('./endpoints/login.js');
 app.post('/login', loginAPI.post);
+*/
 
 app.get('/volunteer-history', (req, res) => {
 	if (!req.session.isAuthenticated) {
@@ -46,8 +47,9 @@ app.get('/volunteer-history', (req, res) => {
 	}
 	const volunteerHistory = require('./endpoints/organizer/volunteer-history');
 	volunteerHistory.get(req, res, req.session);
-});
+}); 
 
+/*
 app.get('/user/user-profile-management', (req, res) => {
 	if (!req.session.isAuthenticated) {
 			return res.redirect('/login');
@@ -67,7 +69,7 @@ app.get('/user/user-profile-management', (req, res) => {
 			session: req.session
 		});
 });
-
+*/
 
 app.get('/notifications', (req, res) => {
 	if (!req.session.isAuthenticated) {
@@ -78,11 +80,15 @@ app.get('/notifications', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-	req.session.destroy(() => {
-		res.redirect('/login');
+	req.session.destroy((err) => {
+			if (err) {
+					console.error('Error logging out:', err);
+					return res.status(500).send("Error logging out.");
+			}
+			res.redirect("/login");
 	});
 });
-*/
+
 
 
 let getPaths = []; // For creating the sitemap

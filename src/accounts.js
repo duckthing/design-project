@@ -152,6 +152,21 @@ function validateOrganizerCredentials(username, password) {
 	return false;
 }
 
+const getUserNotificationsStmt = db.prepare(`
+	SELECT notification_id AS id, notification_text AS message, 
+  CASE WHEN dismissed = 1 THEN 'Alert' ELSE 'Reminder' END AS type 
+  FROM user_notifications 
+  WHERE user_account_id = ? 
+  ORDER BY notification_id DESC`
+);
+
+function getUserNotifications(userID) {
+	return getUserNotificationsStmt.all(userID);
+}
+
+exports.getUserNotifications = getUserNotifications;
+	
+
 // Default data for the database
 if (dbSource.databaseJustCreated) {
 	console.log("database just created")
