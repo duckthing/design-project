@@ -21,7 +21,11 @@ exports.post = function (req, res) {
 			return res.status(401).send("Invalid password");
 		} else {
 			// Correct password
-			req.session.user = { username: req.body.username, role: 'user' };
+			req.session.user = { 
+				username: req.body.username, 
+				role: 'user',
+				user_account_id: userAccount.user_account_id
+		 	};
 			req.session.isAuthenticated = true;
 			return res.redirect("/user/user-profile-management");
 		}
@@ -32,7 +36,10 @@ exports.post = function (req, res) {
 			return res.status(401).send("Invalid password");
 		} else {
 			// Correct password
-			req.session.organizer = { username: req.body.username, role: 'organizer' };
+			req.session.organizer = { 
+				username: req.body.username, 
+				role: 'organizer' 
+			};
 			req.session.isAuthenticated = true;
 			return res.redirect("/organizer/event-creation-page");
 		}
