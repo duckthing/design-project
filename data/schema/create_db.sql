@@ -51,12 +51,13 @@ CREATE TABLE IF NOT EXISTS has_skills (
 );
 
 CREATE TABLE IF NOT EXISTS user_available_at (
-	user_account_id		INTEGER PRIMARY KEY,
-	from_date			INT NOT NULL,
-	to_date				INT NOT NULL,
+	user_account_id		INTEGER,
+	available_at		INT NOT NULL,
+
+	UNIQUE(user_account_id, available_at),
 
 	FOREIGN KEY (user_account_id)
-		REFERENCES user_accounts (uesr_account_id)
+		REFERENCES user_accounts (user_account_id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
 );

@@ -41,15 +41,7 @@ exports.post = function(req, res) {
         return res.status(400).send("Account does not exist.");
 	} else {
 		// Update the account and redirect back when done
-		// TODO: Implement
-		account.fullName = fullName;
-		account.address1 = address1;
-		account.address2 = address2 != null ? address2 : "";
-		account.city = city;
-		account.state = state;
-		account.skills = skills.split(",");
-		account.preferences = preferences;
-		account.availability = new Date(availability);
+		accountsModule.updateUserAccountProfile(account.user_account_id, account.username, account.password, fullName, address1, address2, city, state, 0, preferences, skills.split(","), [new Date(availability)]);
 		return res.redirect("/user/user-profile-management");
 	}
 };

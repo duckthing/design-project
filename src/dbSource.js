@@ -1,5 +1,5 @@
 const Database = require("better-sqlite3");
-const db = new Database("./data/database.db");
+const db = new Database("./data/database.db", {verbose: console.log});
 exports.db = db;
 
 // Check if the database was initialized.

@@ -40,7 +40,7 @@ function getUserSkillsFromUserID(userID) {
 }
 exports.getUserSkillsFromUserID = getUserSkillsFromUserID;
 
-const getUserAvailabilityFromUserIDStmt = db.prepare("SELECT a.from_date, a.to_date FROM user_available_at a INNER JOIN user_accounts u ON u.user_account_id = a.user_account_id WHERE u.user_account_id = ?");
+const getUserAvailabilityFromUserIDStmt = db.prepare("SELECT available_at FROM user_available_at a INNER JOIN user_accounts u ON u.user_account_id = a.user_account_id WHERE u.user_account_id = ?");
 function getUserAvailabilityFromUserID(userID) {
 	return getUserAvailabilityFromUserIDStmt.all(userID);
 }
@@ -59,6 +59,55 @@ function createUserAccount(username, password, fullName, address1 = "", city = "
 		return true, getUserByUserID(info.lastInsertRowid);
 	}
 }
+exports.createUserAccount = createUserAccount;
+
+const addSkillToUserIDStmt = db.prepare("INSERT INTO has_skills(user_account_id, skill_id) VALUES (?, ?)")
+function addSkillToUserID(userID, skillID) {
+	addSkillToUserIDStmt.run(userID, skillID);
+}
+exports.addSkillToUserID = addSkillToUserID;
+
+const addAvailabilityToUserIDStmt = db.prepare("INSERT INTO user_available_at(user_account_id, available_at) VALUES (?, ?)")
+function addAvailabilityToUserID(userID, date) {
+	addAvailabilityToUserIDStmt.run(userID, date);
+}
+exports.addAvailabilityToUserID = addAvailabilityToUserID;
+
+const removeAllSkillsFromUserIDStmt = db.prepare("DELETE FROM has_skills WHERE user_account_id = ?")
+function removeAllSkillsFromUserID(userID) {
+	removeAllSkillsFromUserIDStmt.run(userID);
+}
+exports.removeAllSkillsFromUserID = removeAllSkillsFromUserID;
+
+const removeAllAvailabilityFromUserIDStmt = db.prepare("DELETE FROM user_available_at WHERE user_account_id = ?")
+function removeAllAvailabilityFromUserID(userID) {
+	removeAllAvailabilityFromUserIDStmt.run(userID);
+}
+exports.removeAllAvailabilityFromUserID = removeAllAvailabilityFromUserID;
+
+const updateUserAccountProfileStmt = db.prepare("UPDATE user_accounts SET username = ?, password = ?, full_name = ?, address1 = ?, address2 = ?, city = ?, state_code = ?, zipcode = ?, preferences = ? WHERE user_account_id = ?")
+function updateUserAccountProfile(userID, username, password, fullName, address1, address2 = "", city, stateCode, zipcode, preferences = "", skillIDs = [], availability = []) {
+	removeAllSkillsFromUserID(userID);
+	removeAllAvailabilityFromUserID(userID);
+	updateUserAccountProfileStmt.run(username, password, fullName, address1, address2, city, stateCode, zipcode, preferences, userID);
+	for (skillID of skillIDs) {
+		addSkillToUserID(userID, skillID);
+	}
+	for (date of availability) {
+		// Convert things into SQL values
+		let realDateVal;
+		if (typeof date == "object") {
+			// (most likely a Date object)
+			// Divide by 1000 to get seconds, not milliseconds
+			realDateVal = date.getTime() * 0.001;
+		} else {
+			// If it's a number
+			realDateVal = date;
+		}
+		addAvailabilityToUserID(userID, realDateVal);
+	}
+}
+exports.updateUserAccountProfile = updateUserAccountProfile;
 
 function validateUserCredentials(username, password) {
 	const account = getUserAccount(username);

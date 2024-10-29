@@ -30,7 +30,8 @@ function createEvent(eventName, address, city, stateCode, urgent, eventDate) {
 	// Convert things into SQL values
 	const urgentVal = urgent ? 1 : 0;
 	let eventDateVal;
-	if (typeof eventDate == "date") {
+	if (typeof eventDate == "object") {
+		// (most likely a Date object)
 		// Divide by 1000 to get seconds, not milliseconds
 		eventDateVal = eventDate.getTime() * 0.001;
 	} else {
