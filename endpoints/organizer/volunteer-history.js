@@ -30,6 +30,9 @@ function validateEvent(event) {
 }
 
 exports.get = function(req, res) {
+	if (!req.session.isAuthenticated) {
+		return res.redirect('/login');
+	}
   // Fetch data dynamically (this could be from a database or any other source)
   /* const historyData = [
     {

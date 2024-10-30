@@ -6,13 +6,14 @@ exports.get = function(req, res) {
     if (req.session.user) {
         const account = accountsModule.getUserByUsername(req.session.user.username);
         if (!account) {
-            return res.redirect("/login");  // Handle case where account is not found
+			// Handle case where account is not found
+			return res.redirect("/login");
         }
 		const userSkills = accountsModule.getUserSkillsFromUserID(account.user_account_id);
 		const userAvailability = accountsModule.getUserAvailabilityFromUserID(account.user_account_id);
 		const allSkills = skillsModule.getAllSkills();
 		const states = statesModule.states;
-        res.render("pages/user/user-profile-management", {
+        return res.render("pages/user/user-profile-management", {
 			profile: account,
 			userSkills: userSkills,
 			userAvailability: userAvailability,
@@ -22,7 +23,7 @@ exports.get = function(req, res) {
 			require: require,
 		});
     } else {
-        res.redirect("/login");
+        return res.redirect("/login");
     }
 };
 

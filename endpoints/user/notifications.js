@@ -19,7 +19,9 @@ function validateNotification(notification) {
 }
 
 exports.get = function(req, res) {
-
+	if (!req.session.isAuthenticated) {
+		return res.redirect('/login');
+	}
   /* const notificationsData = [
     {
       id: 'notification1',
