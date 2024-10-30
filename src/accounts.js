@@ -52,11 +52,11 @@ function createUserAccount(username, password, fullName, address1 = "", city = "
 	const existingAccount = getUserByUsername(username);
 	if (existingAccount) {
 		// This account already exists
-		return false, "Account already exists";
+		return null;
 	} else {
 		// Create the account
 		const info = createUserAccountStmt.run(username, password, fullName, address1, city, stateCode, zipcode, preferences);
-		return true, getUserByUserID(info.lastInsertRowid);
+		return getUserByUserID(info.lastInsertRowid);
 	}
 }
 exports.createUserAccount = createUserAccount;
@@ -135,11 +135,11 @@ function createOrganizerAccount(username, password) {
 	// TODO: Validate input
 	const account = getOrganizerByUsername(username);
 	if (account) {
-		return false, "Account already exists";
+		return null;
 	} else {
 		// Create the account
 		const info = createOrganizerAccountStmt.run(username, password);
-		return true, getOrganizerByUserID(info.lastInsertRowid);
+		return getOrganizerByUserID(info.lastInsertRowid);
 	}
 }
 exports.createOrganizerAccount = createOrganizerAccount;
