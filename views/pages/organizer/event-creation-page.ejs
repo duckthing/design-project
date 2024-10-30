@@ -30,9 +30,8 @@
 							<!-- Creates the skill select dropdown -->
 						<label for="skillRequired">Skill needed</label>
 						<select id="skillRequired" name="skillRequired" required>
-						<% const skillModule = require("../../data/skills.js") %>
-						<% skillModule.skills.forEach(function(skill) { %>
-							<option value="<%=skill.id%>"><%=skill.name%></option>
+						<% allSkills.forEach(function(skill) { %>
+							<option value="<%=skill.skill_id%>"><%=skill.skill_name%></option>
 						<% }) %>
 						</select>
 						<h3>Location</h3>

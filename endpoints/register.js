@@ -13,6 +13,7 @@ exports.post = function(req, res) {
 	const username = req.body.username;
 	const password = req.body.password;
 
+	console.log(req.body.role)
 	if (req.body.role == "volunteer") {
 		const fullName = req.body.fullName;
 		const address1 = req.body.address1;
@@ -33,6 +34,7 @@ exports.post = function(req, res) {
 		}
 		return;
 	} else if (req.body.role == "admin") {
+		console.log("creating admin account")
 		let success = accountsModule.createOrganizerAccount(username, password);
 		if (success) {
 			req.session.organizer = {username: req.body.username};

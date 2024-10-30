@@ -25,8 +25,26 @@ function getFutureEvents() {
 }
 exports.getFutureEvents = getFutureEvents;
 
+const getEventByEventIDStmt = db.prepare("SELECT * FROM events WHERE event_id = ?");
+function getEventByEventID(eventID) {
+	return getEventByEventIDStmt.run(eventID);
+}
+exports.getEventByEventID = getEventByEventID;
+
+const addRequiredSkillToEventIDStmt = db.prepare("INSERT INTO event_requires_skills(event_id, skill_id) VALUES (?, ?)");
+function addRequiredSkillToEventID(eventID, skillID) {
+	addRequiredSkillToEventIDStmt.run(eventID, skillID);
+}
+exports.addRequiredSkillToEventID = addRequiredSkillToEventID;
+
+const removeAllRequiredSkillsFromEventIDStmt = db.prepare("DELETE FROM event_requires_skills WHERE event_id = ?");
+function removeAllRequiredSkillsFromEventID(eventID) {
+	removeAllRequiredSkillsFromEventIDStmt.run(eventID);
+}
+exports.removeAllRequiredSkillsFromEventID = removeAllRequiredSkillsFromEventID;
+
 const createEventStmt = db.prepare("INSERT INTO events(event_name, address, city, state_code, urgent, event_date) VALUES (?, ?, ?, ?, ?, ?)");
-function createEvent(eventName, address, city, stateCode, urgent, eventDate) {
+function createEvent(eventName, address, city, stateCode, urgent, eventDate, skillsRequired) {
 	// Convert things into SQL values
 	const urgentVal = urgent ? 1 : 0;
 	let eventDateVal;
@@ -38,6 +56,10 @@ function createEvent(eventName, address, city, stateCode, urgent, eventDate) {
 		eventDateVal = eventDate;
 	}
 	const info = createEventStmt.run(eventName, address, city, stateCode, urgentVal, eventDateVal);
-	return info;
+	const eventID = info.lastInsertRowId;
+	skillsRequired.forEach(function(skillID) {
+		addRequiredSkillToEventID(eventID, skillID);
+	});
+	return getEventByEventID(eventID);
 }
 exports.createEvent = createEvent;

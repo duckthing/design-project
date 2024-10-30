@@ -1,7 +1,12 @@
 const events = require("../../src/events");
+const skillsModule = require("../../data/skills");
 
 exports.get = function(req, res) {
-	res.render("./pages/organizer/event-creation-page.ejs", {require: require});
+	const allSkills = skillsModule.getAllSkills();
+	res.render("./pages/organizer/event-creation-page.ejs", {
+		allSkills: skillsModule.getAllSkills(),
+		require: require
+	});
 }
 
 exports.post = function(req, res) {
@@ -10,21 +15,14 @@ exports.post = function(req, res) {
 		return;
 	}
 
-	const name = req.body.eventName;
-	const date = new Date(req.body.eventDate);
+	const eventName = req.body.eventName;
+	const eventDate = new Date(req.body.eventDate);
 	const urgent = req.body.urgent;
-	const skillsRequired = [req.skillRequired];
+	const skillsRequired = [req.body.skillRequired];
 	const address = req.body.address;
 	const city = req.body.city;
-	const state = req.body.state;
+	const stateCode = req.body.state;
 
-	const event = events.getEvent(req.body.name);
-	if (event != null) {
-		// Duplicate event
-		res.send("Duplicate event");
-		return
-	}
-
-	events.createEvent(name, date, urgent, skillsRequired, address, city, state);
+	events.createEvent(eventName, address, city, stateCode, urgent, eventDate, skillsRequired);
 	res.send("Created event");
 }
