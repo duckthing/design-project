@@ -132,3 +132,24 @@ CREATE TABLE IF NOT EXISTS user_notifications (
 
 CREATE INDEX idx_user_notifications
 ON user_notifications (user_account_id);
+
+CREATE TABLE IF NOT EXISTS volunteer_history (
+    event_id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_account_id     INTEGER NOT NULL,
+    event_name          TEXT NOT NULL,
+    event_date          TEXT NOT NULL,
+    required_skills     TEXT NOT NULL,
+    urgency             TEXT NOT NULL CHECK (urgency IN ('High', 'Medium', 'Low')),
+    location            TEXT NOT NULL,
+    status              TEXT NOT NULL CHECK (status IN ('Completed', 'In Progress', 'Not Started', 'Upcoming')),
+
+    FOREIGN KEY (user_account_id)
+        REFERENCES user_accounts (user_account_id)
+            ON UPDATE CASCADE
+            ON DELETE CASCADE
+);
+
+INSERT INTO volunteer_history (user_account_id, event_name, event_date, required_skills, urgency, location, status)
+VALUES 
+    (1, 'Beach Cleanup', '2024-10-01', 'Teamwork, Environmental Awareness', 'High', 'Santa Monica Beach', 'Completed'),
+    (1, 'Community Garden', '2024-09-20', 'Gardening, Communication', 'Medium', 'Central Park', 'In Progress');

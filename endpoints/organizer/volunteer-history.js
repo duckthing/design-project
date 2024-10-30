@@ -1,4 +1,6 @@
 const path = require('path');
+const accountsModule = require("../../src/accounts");
+const db = require("../../src/dbSource").db;
 
 function validateEvent(event) {
   const requiredFields = ['eventName', 'date', 'requiredSkills', 'urgency', 'location', 'status'];
@@ -29,7 +31,7 @@ function validateEvent(event) {
 
 exports.get = function(req, res) {
   // Fetch data dynamically (this could be from a database or any other source)
-  const historyData = [
+  /* const historyData = [
     {
       eventName: 'Beach Cleanup',
       date: '2024-10-01',
@@ -166,7 +168,18 @@ exports.get = function(req, res) {
       location: 'Boston Charity Warehouse',
       status: 'Completed',
     }
-  ];
+  ]; */
+
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+
+  const userId = req.session.user.user_account_id;
+  const historyData = db.prepare(`
+    SELECT event_name AS eventName, event_date AS date, required_skills AS requiredSkills, urgency, location, status 
+    FROM volunteer_history
+    WHERE user_account_id = ?
+  `).all(userId);
 
 	const errors = [];
   historyData.forEach((event, index) => {

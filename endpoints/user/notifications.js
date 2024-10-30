@@ -1,4 +1,5 @@
 const path = require('path');
+const accountsModule = require("../../src/accounts");
 
 function validateNotification(notification) {
   const requiredFields = ['id', 'message', 'type'];
@@ -19,7 +20,7 @@ function validateNotification(notification) {
 
 exports.get = function(req, res) {
 
-  const notificationsData = [
+  /* const notificationsData = [
     {
       id: 'notification1',
       message: 'You have been assigned to the "Beach Cleanup" event on 12-30-2024.',
@@ -35,7 +36,14 @@ exports.get = function(req, res) {
       message: 'Don\'t forget "Cloudy With a Chance of Meatballs" event starts next week.',
       type: 'Reminder',
     },
-  ];
+  ]; */
+
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  // Retrieve notifications from database
+  const notificationsData = accountsModule.getUserNotifications(req.session.user.user_account_id);
 
 	// Validate each notification
   const errors = [];
