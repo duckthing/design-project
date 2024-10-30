@@ -25,7 +25,7 @@ exports.post = function (req, res) {
 				username: req.body.username, 
 				role: 'user',
 				user_account_id: userAccount.user_account_id
-		 	};
+			};
 			req.session.isAuthenticated = true;
 			return res.redirect("/user/user-profile-management");
 		}

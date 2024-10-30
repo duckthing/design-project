@@ -169,7 +169,6 @@ exports.getUserNotifications = getUserNotifications;
 
 // Default data for the database
 if (dbSource.databaseJustCreated) {
-	console.log("database just created")
 	let userData = [
 		{
 			username: "john",
@@ -203,7 +202,7 @@ if (dbSource.databaseJustCreated) {
 	];
 	
 	userData.forEach(function(d) {
-		console.log(createUserAccount(d.username, d.password, d.fullName, d.address1, d.city, d.state, d.zipcode, d.preferences));
+		createUserAccount(d.username, d.password, d.fullName, d.address1, d.city, d.state, d.zipcode, d.preferences);
 	});
 
 	let organizerData = [

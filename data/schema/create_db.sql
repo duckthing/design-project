@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS volunteer_history (
             ON DELETE CASCADE
 );
 
-INSERT INTO volunteer_history (user_account_id, event_name, event_date, required_skills, urgency, location, status)
-VALUES 
-    (1, 'Beach Cleanup', '2024-10-01', 'Teamwork, Environmental Awareness', 'High', 'Santa Monica Beach', 'Completed'),
-    (1, 'Community Garden', '2024-09-20', 'Gardening, Communication', 'Medium', 'Central Park', 'In Progress');
+-- INSERT INTO volunteer_history (user_account_id, event_name, event_date, required_skills, urgency, location, status)
+-- VALUES 
+--     (1, 'Beach Cleanup', '2024-10-01', 'Teamwork, Environmental Awareness', 'High', 'Santa Monica Beach', 'Completed'),
+--     (1, 'Community Garden', '2024-09-20', 'Gardening, Communication', 'Medium', 'Central Park', 'In Progress');
