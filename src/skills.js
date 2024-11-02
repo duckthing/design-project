@@ -1,4 +1,4 @@
-const dbSource = require("../src/dbSource");
+const dbSource = require("./dbSource");
 const db = dbSource.db;
 
 class Skill {

@@ -121,7 +121,8 @@ function updateUserAccountProfile(userID, username, password, fullName, address1
 		if (typeof date == "object") {
 			// (most likely a Date object)
 			// Divide by 1000 to get seconds, not milliseconds
-			realDateVal = date.getTime() * 0.001;
+			
+			realDateVal = Math.floor(date.getTime() * 0.001);
 		} else {
 			// If it's a number
 			realDateVal = date;
@@ -230,7 +231,8 @@ if (dbSource.databaseJustCreated) {
 	];
 	
 	userData.forEach(function(d) {
-		createUserAccount(d.username, d.password, d.fullName, d.address1, d.city, d.state, d.zipcode, d.preferences);
+		const account = createUserAccount(d.username, d.password, d.fullName, d.address1, d.city, d.state, d.zipcode, d.preferences);
+		addAvailabilityToUserID(account.user_account_id, Math.floor(d.availability.getTime() * 0.001));
 	});
 
 	let organizerData = [
