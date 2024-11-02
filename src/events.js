@@ -63,7 +63,8 @@ function createEvent(eventName, address, city, stateCode, urgent, eventDate, ski
 	if (typeof eventDate == "object") {
 		// (most likely a Date object)
 		// Divide by 1000 to get seconds, not milliseconds
-		eventDateVal = eventDate.getTime() * 0.001;
+		eventDateVal = Math.floor(eventDate.getTime() * 0.001);
+		console.log(eventDate);
 	} else {
 		eventDateVal = eventDate;
 	}
@@ -75,3 +76,39 @@ function createEvent(eventName, address, city, stateCode, urgent, eventDate, ski
 	return getEventByEventID(eventID);
 }
 exports.createEvent = createEvent;
+
+const getAllVolunteerMatchesStmt = db.prepare(`
+	SELECT DISTINCT v.full_name, e.event_id, e.event_name
+	FROM user_accounts v, user_available_at a, events e
+	WHERE
+		v.user_account_id = a.user_account_id
+		AND
+		date(a.available_at, 'unixepoch') = date(e.event_date, 'unixepoch')
+	ORDER BY
+		e.event_id
+`);
+function getAllVolunteerMatches() {
+	const matches = getAllVolunteerMatchesStmt.all();
+	return matches;
+}
+exports.getAllVolunteerMatches = getAllVolunteerMatches;
+
+
+// Default data for the database
+if (dbSource.databaseJustCreated) {
+	let defaultEvents = [
+		{
+			eventName: "Beach Cleaning",
+			address: "123 Beach Street",
+			city: "Houston",
+			stateCode: "TX",
+			urgent: false,
+			eventDate: new Date(2024, 1, 1),
+			skillsRequired: [1, 2]
+		}
+	];
+
+	defaultEvents.forEach(function(e) {
+		createEvent(e.eventName, e.address, e.city, e.stateCode, e.urgent, e.eventDate, e.skillsRequired);
+	});
+}

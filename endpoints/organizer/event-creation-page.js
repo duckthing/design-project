@@ -1,5 +1,5 @@
 const events = require("../../src/events");
-const skillsModule = require("../../data/skills");
+const skillsModule = require("../../src/skills");
 
 exports.get = function(req, res) {
 	const allSkills = skillsModule.getAllSkills();

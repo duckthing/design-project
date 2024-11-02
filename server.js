@@ -3,8 +3,8 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const accountsModule = require('./src/accounts.js');
-const stateModule = require('./data/states.js');
-const skillModule = require('./data/skills.js');
+const stateModule = require('./src/states.js');
+const skillModule = require('./src/skills.js');
 const db = require("./src/dbSource.js");
 
 const app = express();

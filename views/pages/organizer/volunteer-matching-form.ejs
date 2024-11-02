@@ -22,8 +22,8 @@
 				</tr>
 				<% matches.forEach(function(match) { %>
 					<tr>
-						<td><a href="/user/user-profile-management"><%=match.user.fullName%></a></td>
-						<td><%=match.event.name%></td>
+						<td><a href="/user/user-profile-management"><%=match.full_name%></a></td>
+						<td><%=match.event_name%></td>
 						<td class="eventActions">
 							<button class="accept">Assign</button>
 							<button>Ignore</button>
