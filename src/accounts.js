@@ -23,30 +23,40 @@ class OrganizerAccount {
 	}
 }
 
-const getUserByUsernameStmt = db.prepare("SELECT * FROM user_accounts WHERE username = ?");
+const getUserByUsernameStmt = db.prepare(`
+	SELECT * FROM user_accounts WHERE username = ?
+`);
 function getUserByUsername(username) {
 	return getUserByUsernameStmt.get(username);
 }
 exports.getUserByUsername = getUserByUsername;
 
-const getUserByUserIDStmt = db.prepare("SELECT * FROM user_accounts WHERE user_account_id = ?");
+const getUserByUserIDStmt = db.prepare(`
+	SELECT * FROM user_accounts WHERE user_account_id = ?
+`);
 function getUserByUserID(username) {
 	return getUserByUserIDStmt.get(username);
 }
 
-const getUserSkillsFromUserIDStmt = db.prepare("SELECT s.skill_id, s.skill_name FROM has_skills h INNER JOIN skills s ON h.skill_id = s.skill_id WHERE h.user_account_id = ?");
+const getUserSkillsFromUserIDStmt = db.prepare(`
+	SELECT s.skill_id, s.skill_name FROM has_skills h INNER JOIN skills s ON h.skill_id = s.skill_id WHERE h.user_account_id = ?
+`);
 function getUserSkillsFromUserID(userID) {
 	return getUserSkillsFromUserIDStmt.all(userID);
 }
 exports.getUserSkillsFromUserID = getUserSkillsFromUserID;
 
-const getUserAvailabilityFromUserIDStmt = db.prepare("SELECT available_at FROM user_available_at a INNER JOIN user_accounts u ON u.user_account_id = a.user_account_id WHERE u.user_account_id = ?");
+const getUserAvailabilityFromUserIDStmt = db.prepare(`
+	SELECT available_at FROM user_available_at a INNER JOIN user_accounts u ON u.user_account_id = a.user_account_id WHERE u.user_account_id = ?
+`);
 function getUserAvailabilityFromUserID(userID) {
 	return getUserAvailabilityFromUserIDStmt.all(userID);
 }
 exports.getUserAvailabilityFromUserID = getUserAvailabilityFromUserID;
 
-const createUserAccountStmt = db.prepare("INSERT INTO user_accounts(username, password, full_name, address1, city, state_code, zipcode, preferences) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+const createUserAccountStmt = db.prepare(`
+	INSERT INTO user_accounts(username, password, full_name, address1, city, state_code, zipcode, preferences) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+`);	
 function createUserAccount(username, password, fullName, address1 = "", city = "", stateCode = "TX", zipcode = 0, preferences = "") {
 	// TODO: Validate input
 	const existingAccount = getUserByUsername(username);
@@ -61,31 +71,43 @@ function createUserAccount(username, password, fullName, address1 = "", city = "
 }
 exports.createUserAccount = createUserAccount;
 
-const addSkillToUserIDStmt = db.prepare("INSERT INTO has_skills(user_account_id, skill_id) VALUES (?, ?)")
+const addSkillToUserIDStmt = db.prepare(`
+	INSERT INTO has_skills(user_account_id, skill_id) VALUES (?, ?)
+`);	
 function addSkillToUserID(userID, skillID) {
 	addSkillToUserIDStmt.run(userID, skillID);
 }
 exports.addSkillToUserID = addSkillToUserID;
 
-const addAvailabilityToUserIDStmt = db.prepare("INSERT INTO user_available_at(user_account_id, available_at) VALUES (?, ?)")
+const addAvailabilityToUserIDStmt = db.prepare(`
+	INSERT INTO user_available_at(user_account_id, available_at) VALUES (?, ?)
+`);	
 function addAvailabilityToUserID(userID, date) {
 	addAvailabilityToUserIDStmt.run(userID, date);
 }
 exports.addAvailabilityToUserID = addAvailabilityToUserID;
 
-const removeAllSkillsFromUserIDStmt = db.prepare("DELETE FROM has_skills WHERE user_account_id = ?")
+const removeAllSkillsFromUserIDStmt = db.prepare(`
+	DELETE FROM has_skills WHERE user_account_id = ?
+`);	
 function removeAllSkillsFromUserID(userID) {
 	removeAllSkillsFromUserIDStmt.run(userID);
 }
 exports.removeAllSkillsFromUserID = removeAllSkillsFromUserID;
 
-const removeAllAvailabilityFromUserIDStmt = db.prepare("DELETE FROM user_available_at WHERE user_account_id = ?")
+const removeAllAvailabilityFromUserIDStmt = db.prepare(`
+	DELETE FROM user_available_at WHERE user_account_id = ?
+`);	
 function removeAllAvailabilityFromUserID(userID) {
 	removeAllAvailabilityFromUserIDStmt.run(userID);
 }
 exports.removeAllAvailabilityFromUserID = removeAllAvailabilityFromUserID;
 
-const updateUserAccountProfileStmt = db.prepare("UPDATE user_accounts SET username = ?, password = ?, full_name = ?, address1 = ?, address2 = ?, city = ?, state_code = ?, zipcode = ?, preferences = ? WHERE user_account_id = ?")
+const updateUserAccountProfileStmt = db.prepare(`
+	UPDATE user_accounts
+	SET username = ?, password = ?, full_name = ?, address1 = ?, address2 = ?, city = ?, state_code = ?, zipcode = ?, preferences = ?
+	WHERE user_account_id = ?
+`);	
 function updateUserAccountProfile(userID, username, password, fullName, address1, address2 = "", city, stateCode, zipcode, preferences = "", skillIDs = [], availability = []) {
 	removeAllSkillsFromUserID(userID);
 	removeAllAvailabilityFromUserID(userID);
@@ -117,20 +139,26 @@ function validateUserCredentials(username, password) {
 	return false;
 }
 
-const getOrganizerByUsernameStmt = db.prepare("SELECT * FROM organizer_accounts WHERE username = ?");
+const getOrganizerByUsernameStmt = db.prepare(`
+	SELECT * FROM organizer_accounts WHERE username = ?
+`);	
 function getOrganizerByUsername(username) {
 	return getOrganizerByUsernameStmt.get(username);
 }
 exports.getOrganizerByUsername = getOrganizerByUsername;
 
-const getOrganizerByUserIDStmt = db.prepare("SELECT * FROM organizer_accounts WHERE organizer_account_id = ?");
+const getOrganizerByUserIDStmt = db.prepare(`
+	SELECT * FROM organizer_accounts WHERE organizer_account_id = ?
+`);	
 function getOrganizerByUserID(userID) {
 	return getOrganizerByUserIDStmt.get(userID);
 }
 exports.getOrganizerByUsername = getOrganizerByUsername;
 
 
-const createOrganizerAccountStmt = db.prepare("INSERT INTO organizer_accounts(username, password) VALUES (?,?)")
+const createOrganizerAccountStmt = db.prepare(`
+	INSERT INTO organizer_accounts(username, password) VALUES (?,?)
+`);	
 function createOrganizerAccount(username, password) {
 	// TODO: Validate input
 	const account = getOrganizerByUsername(username);
