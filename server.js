@@ -44,7 +44,7 @@ function addEndpoints(app, startPath, mountPath) {
 		fs.stat("." + itemPath, (err, stat) => {
 			if (err) {
 				// An error occurred reading the file system
-				// console.log("Error: " + err);
+				//console.log("Error: " + err);
 			}
 			else {
 				// We have access to this item
@@ -63,6 +63,7 @@ function addEndpoints(app, startPath, mountPath) {
 						// console.log(endpointPath);
 						app.get(endpointPath, mod.get);
 						getPaths.push(endpointPath);
+
 					}
 					
 					if (mod.post != null) {
