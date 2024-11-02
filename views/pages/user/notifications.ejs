@@ -6,7 +6,27 @@
     <title>Notifications - Volunteer Management</title>
     <link rel="stylesheet" href="/css/notifications.css">
 </head>
+
 <body>
+    <!-- Navbar -->
+    <nav id="main-nav">
+        <div class="nav-header">
+            <button class="nav-toggle" id="nav-toggle-btn">&#9776;</button>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a class="nav-link" href="/">Home</a>
+            <% if (session && session.isAuthenticated) { %>
+                <a class="nav-link" href="/user/user-profile-management">Profile</a>
+                <a class="nav-link" href="/user/notifications">Notifications</a>
+                <a class="nav-link" href="/organizer/volunteer-history">History</a>
+                <a class="nav-link" href="/logout">Logout</a>
+            <% } else { %>
+                <a class="nav-link" href="/login">Log in</a>
+            <% } %>
+        </div>
+    </nav>
+
+    <!-- Notifications Section -->
     <section id="notificationSection">
         <h2>Notifications</h2>
 
@@ -32,5 +52,6 @@
             }
         }
     </script>
+    <script src="/js/menu.js"></script>
 </body>
 </html>

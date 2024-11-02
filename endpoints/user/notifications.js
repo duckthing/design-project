@@ -64,5 +64,6 @@ exports.get = function(req, res) {
   // Render the EJS view and pass the notifications data to it
   res.render(path.join(__dirname, '../../views/pages/user/notifications'), {
     notifications: notificationsData,
+    session: req.session
   });
 };
