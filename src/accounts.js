@@ -194,7 +194,6 @@ function getUserNotifications(userID) {
 }
 
 exports.getUserNotifications = getUserNotifications;
-	
 
 // Default data for the database
 if (dbSource.databaseJustCreated) {
@@ -211,7 +210,7 @@ if (dbSource.databaseJustCreated) {
 				"moving"
 			],
 			preferences: "No preferences",
-			availability: new Date(2024, 1, 1),
+			availability: new Date(2024, 0, 1),
 		},
 		{
 			username: "user",
@@ -226,7 +225,7 @@ if (dbSource.databaseJustCreated) {
 				"moving",
 			],
 			preferences: "No preferences",
-			availability: new Date(2024, 1, 2),
+			availability: new Date(2024, 0, 2),
 		},
 	];
 	

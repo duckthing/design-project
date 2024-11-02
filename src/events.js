@@ -64,7 +64,6 @@ function createEvent(eventName, address, city, stateCode, urgent, eventDate, ski
 		// (most likely a Date object)
 		// Divide by 1000 to get seconds, not milliseconds
 		eventDateVal = Math.floor(eventDate.getTime() * 0.001);
-		console.log(eventDate);
 	} else {
 		eventDateVal = eventDate;
 	}
@@ -103,7 +102,7 @@ if (dbSource.databaseJustCreated) {
 			city: "Houston",
 			stateCode: "TX",
 			urgent: false,
-			eventDate: new Date(2024, 1, 1),
+			eventDate: new Date(2024, 0, 1),
 			skillsRequired: [1, 2]
 		}
 	];
