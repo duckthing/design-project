@@ -13,10 +13,18 @@ exports.get = function(req, res) {
 		const userAvailability = accountsModule.getUserAvailabilityFromUserID(account.user_account_id);
 		const allSkills = skillsModule.getAllSkills();
 		const states = statesModule.states;
+		let date;
+		if (userAvailability[0] == null) {
+			date = new Date();
+		} else {
+			date = new Date();
+			date.setUTCSeconds(userAvailability[0]);
+		}
+
         return res.render("pages/user/user-profile-management", {
 			profile: account,
 			userSkills: userSkills,
-			userAvailability: userAvailability,
+			userAvailability: date.toISOString().substring(0, 10),
 			allSkills: allSkills,
 			allStates: states,
 			session: req.session,

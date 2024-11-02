@@ -75,7 +75,7 @@
 
 						<!-- TODO: Make it so you can add more dates -->
 						<label for="availability">Availability</label>
-							<input type="date" id="availability" name="availability" maxlength="100" value="<%# TODO %>" required>
+							<input type="date" id="availability" name="availability" maxlength="100" value="<%-userAvailability%>" required>
 							<br>
 						<input type="submit" value="Update information">
 					</form>
@@ -83,7 +83,6 @@
 			</article>
 		</div>
 		<script>
-			console.log("runnning")
 			document.querySelector("form").addEventListener('formdata', (e) => {
 				e.preventDefault();
 				const formData = e.formData; 
