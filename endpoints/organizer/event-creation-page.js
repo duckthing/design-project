@@ -37,12 +37,6 @@ exports.post = function(req, res) {
 	try {
 		const eventId = events.createEvent(eventName, address, city, stateCode, urgent, eventDate, skillsRequired);
 
-		// Notify all users of the new event
-		const users = accountsModule.getAllUsers();
-		users.forEach(user => {
-			accountsModule.createNotification(user.user_account_id, `New Event Created: ${eventName}`, 'New Event');
-		});
-
 		// Render success page with redirect script
 		res.render("pages/organizer/event-created-success", {
 			eventName: eventName,

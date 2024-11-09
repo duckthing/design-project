@@ -1,4 +1,3 @@
-/* Global Styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -8,37 +7,75 @@ body {
 }
 
 /* Navbar */
-nav {
+#main-nav {
   background-color: #808080;
   padding: 1em;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
 }
 
-nav a {
+.nav-header {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1em;
+}
+
+.nav-link {
   color: white;
   text-decoration: none;
-  margin: 0 15px;
-  padding: 0.5em 1em;
+  padding: 0.40em 0em;
   background-color: #969494;
+  margin: 0 0.05em;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3 ease;
+  width: 115px;
+  text-align: justify;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
 }
 
-nav a:hover {
+.nav-link:hover {
   background-color: #3a3838;
 }
 
-/* Centering Wrapper */
+.nav-toggle {
+  display: none;
+  font-size: 2em;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Centered Wrapper */
 .center {
   display: flex;
   justify-content: center;
   margin-top: 2em;
+  padding: 0 2em;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Article */
+/* Article Layout */
 article {
-  width: 80%;
-  max-width: 800px;
+  width: 100%;
+  max-width: 1500px;
+  padding: 1em;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 }
 
 /* Events List */
@@ -46,22 +83,46 @@ article {
   display: flex;
   flex-direction: column;
   gap: 1em;
+  margin: 2em auto;
+  width: 90%;
+  padding: 0 1em;
+  align-items: center;
 }
 
 /* Event Card */
 .event-card {
-  padding: 1em;
+  padding: 1.5em;
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 100%;
 }
 
-/* RSVP Button Styles */
+.event-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.event-card h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 0.5em;
+}
+
+.event-card p {
+  font-size: 1em;
+  color: #666;
+  margin: 0.5em 0;
+}
+
 .event-card button {
-  margin-top: 10px;
+  margin-top: 1em;
   padding: 0.5em 1em;
-  font-size: 0.9em;
+  font-size: 1em;
   background-color: #969494;
   color: white;
   border: none;
@@ -76,4 +137,42 @@ article {
 
 .event-card button + button {
   margin-left: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 800px) {
+  .center {
+    flex-direction: column;
+    padding: 1em;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 0.5em;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+    font-size: 1.8em;
+  }
+
+  .nav-link {
+    padding: 1em;
+    background-color: #969494;
+    margin: 0.5em 0;
+  }
+
+  .event-card {
+    padding: 1em;
+    width: 100%;
+    margin-bottom: 1em;
+    max-width: 100%;
+  }
 }
