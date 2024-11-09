@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <link rel="stylesheet" href="/css/events.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <a href="/">Home</a>
+        <a href="/user/user-profile-management">Profile</a>
+        <a href="/user/notifications">Notifications</a>
+    </nav>
+
+    <!-- Events List -->
+    <div class="events-list">
+        <% events.forEach(event => { %>
+            <div class="event-card">
+                <h2><%= event.event_name %></h2>
+                <p><strong>Date:</strong> <%= new Date(event.event_date).toLocaleString() %></p>
+                <p><strong>Location:</strong> <%= event.city %>, <%= event.state_code %></p>
+                <p><strong>Urgency:</strong> <%= event.urgent ? "High" : "Low" %></p>
+
+                <!-- RSVP Buttons with data attributes -->
+                <button data-event-id="<%= event.event_id %>" data-status="Going" onclick="rsvpEvent(this)">I'm Going</button>
+                <button data-event-id="<%= event.event_id %>" data-status="Interested" onclick="rsvpEvent(this)">Interested</button>
+            </div>
+        <% }) %>
+    </div>
+
+    <!-- RSVP Script -->
+    <script>
+        async function rsvpEvent(button) {
+            const eventId = button.getAttribute('data-event-id');
+            const status = button.getAttribute('data-status');
+    
+            // Log the values before making the request
+            /* console.log("RSVP Event ID:", eventId);
+            console.log("RSVP Status:", status); */
+    
+            if (!eventId) {
+                alert("Event ID is missing!"); // Alert if eventId is still missing
+                return;
+            }
+    
+            try {
+                const response = await fetch('/user/event-rsvp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ eventId, status }),
+                });
+    
+                if (response.ok) {
+                    alert('RSVP updated!');
+                } else {
+                    const errorText = await response.text();
+                    alert('Failed to RSVP: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Error RSVPing:', error);
+                alert('Error processing RSVP.');
+            }
+        }
+    </script>
+    
+</body>
+</html>

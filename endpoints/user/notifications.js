@@ -1,5 +1,6 @@
 const path = require('path');
 const accountsModule = require("../../src/accounts");
+const db = require("../../src/dbSource").db;
 
 function validateNotification(notification) {
   const requiredFields = ['id', 'message', 'type'];
@@ -19,51 +20,68 @@ function validateNotification(notification) {
 }
 
 exports.get = function(req, res) {
+  try {
+    const testStmt = db.prepare('SELECT name FROM sqlite_master WHERE type=\'table\'');
+    const tables = testStmt.all();
+    /* console.log("Database tables:", tables); */
+  } catch (error) {
+      console.error("Database error:", error);
+      return res.status(500).send("Database connection issue.");
+  }
+
+
 	if (!req.session.isAuthenticated) {
 		return res.redirect('/login');
 	}
-  /* const notificationsData = [
-    {
-      id: 'notification1',
-      message: 'You have been assigned to the "Beach Cleanup" event on 12-30-2024.',
-      type: 'New Event',
-    },
-    {
-      id: 'notification2',
-      message: 'The "Catch an Alligator" event starts on Friday.',
-      type: 'Reminder',
-    },
-    {
-      id: 'notification3',
-      message: 'Don\'t forget "Cloudy With a Chance of Meatballs" event starts next week.',
-      type: 'Reminder',
-    },
-  ]; */
-
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
 
   // Retrieve notifications from database
-  const notificationsData = accountsModule.getUserNotifications(req.session.user.user_account_id);
+  try {
+    const notificationsData = db.prepare(`
+      SELECT notification_id AS id, notification_text AS message, 'New Event' AS type
+      FROM user_notifications
+      WHERE user_account_id = ?
+      AND dismissed = 0
+    `).all(req.session.user.user_account_id);
 
-	// Validate each notification
-  const errors = [];
-  notificationsData.forEach((notification, index) => {
-    const validationError = validateNotification(notification);
-    if (validationError) {
-      errors.push(`Notification #${index + 1}: ${validationError}`);
+    // Validate each notification
+    const errors = [];
+    notificationsData.forEach((notification, index) => {
+      const validationError = validateNotification(notification);
+      if (validationError) {
+        errors.push(`Notification #${index + 1}: ${validationError}`);
+      }
+    });
+
+    if (errors.length > 0) {
+      console.error('Validation errors:', errors);
+      return res.status(400).send('Error validating notification data: ' + errors.join(', '));
     }
-  });
 
-  if (errors.length > 0) {
-    console.error('Validation errors:', errors);
-    return res.status(400).send('Error validating notification data: ' + errors.join(', '));
+    // Render the EJS view and pass the notifications data to it
+    res.render(path.join(__dirname, '../../views/pages/user/notifications'), {
+      notifications: notificationsData,
+      session: req.session
+    });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).send("Internal Server Error");
   }
+};
 
-  // Render the EJS view and pass the notifications data to it
-  res.render(path.join(__dirname, '../../views/pages/user/notifications'), {
-    notifications: notificationsData,
-    session: req.session
-  });
+exports.dismissNotification = function(req, res) {
+  const { notificationId } = req.params;
+  
+  try {
+    db.prepare(`
+      UPDATE user_notifications
+      SET dismissed = 1
+      WHERE notification_id = ?
+      AND user_account_id = ?
+    `).run(notificationId, req.session.user.user_account_id);
+
+    res.redirect('/user/notifications');
+  } catch (error) {
+    console.error("Error dismissing notification:", error);
+    res.status(500).send("Internal Server Error");
+  }
 };

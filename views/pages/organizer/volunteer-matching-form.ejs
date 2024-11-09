@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="/css/example.css">
 		<title>View Matched Volunteers</title>
 	</head>
 	<body>
-		<nav>
-			<a href="/">Home</a>
-			<a href="/organizer/event-creation-page">Create Event</a>
-			<a href="/organizer/volunteer-history">History</a>
+			<nav id="main-nav">
+				<div class="nav-header">
+						<button class="nav-toggle" id="nav-toggle-btn">&#9776;</button>
+				</div>
+				<div class="nav-links" id="nav-links">
+						<a class="nav-link" href="/">Home</a>
+						<% if (session && session.isAuthenticated) { %>
+								<a class="nav-link" href="/organizer/event-creation-page">Create Event</a>
+								<a class="nav-link" href="/user/notifications">Notifications</a>
+								<a class="nav-link" href="/organizer/volunteer-history">History</a>
+								<a class="nav-link" href="/logout">Logout</a>
+						<% } else { %>
+								<a class="nav-link" href="/login">Log in</a>
+						<% } %>
+				</div>
 		</nav>
 		<section>
 			<h1>Assign volunteers</h1>
@@ -39,5 +50,8 @@
 				<% } %>
 			</table>
 		</section>
+
+		<script src="/js/menu.js"></script>
+		
 	</body>
 </html>

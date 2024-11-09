@@ -92,6 +92,16 @@ function getAllVolunteerMatches() {
 }
 exports.getAllVolunteerMatches = getAllVolunteerMatches;
 
+function getEventsWithRSVPStatus(userId) {
+    const stmt = db.prepare(`
+        SELECT e.*, r.rsvp_status
+        FROM events e
+        LEFT JOIN event_rsvps r ON e.event_id = r.event_id AND r.user_account_id = ?
+    `);
+    return stmt.all(userId);
+}
+exports.getEventsWithRSVPStatus = getEventsWithRSVPStatus;
+
 
 // Default data for the database
 if (dbSource.databaseJustCreated) {
