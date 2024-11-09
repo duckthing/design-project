@@ -15,6 +15,7 @@ app.use(express.static("static"));
 app.use("/css", express.static("www/css"));
 app.use("/img", express.static("www/img"));
 app.use("/js", express.static("www/js"));
+app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(

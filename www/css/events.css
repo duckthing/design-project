@@ -1,0 +1,79 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Navbar */
+nav {
+  background-color: #808080;
+  padding: 1em;
+  text-align: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  padding: 0.5em 1em;
+  background-color: #969494;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+  background-color: #3a3838;
+}
+
+/* Centering Wrapper */
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 2em;
+}
+
+/* Article */
+article {
+  width: 80%;
+  max-width: 800px;
+}
+
+/* Events List */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+/* Event Card */
+.event-card {
+  padding: 1em;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* RSVP Button Styles */
+.event-card button {
+  margin-top: 10px;
+  padding: 0.5em 1em;
+  font-size: 0.9em;
+  background-color: #969494;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.event-card button:hover {
+  background-color: #3a3838;
+}
+
+.event-card button + button {
+  margin-left: 10px;
+}

@@ -21,7 +21,12 @@ function getMatches() {
 }
 
 exports.get = function(req, res) {
-	res.render("./pages/organizer/volunteer-matching-form.ejs", {
-		matches: eventsModule.getAllVolunteerMatches(),
+	if (!req.session.isAuthenticated) {
+			return res.redirect('/login');
+	}
+
+	res.render("./pages/organizer/volunteer-matching-form", {
+			matches: eventsModule.getAllVolunteerMatches(),
+			session: req.session
 	});
-}
+};

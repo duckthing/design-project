@@ -181,6 +181,21 @@ function validateOrganizerCredentials(username, password) {
 	return false;
 }
 
+function getAllUsers() {
+	return db.prepare("SELECT user_account_id FROM user_accounts").all();
+}
+exports.getAllUsers = getAllUsers;
+
+// Create a notification for a user (added function)
+const createNotificationStmt = db.prepare(`
+	INSERT INTO user_notifications (user_account_id, notification_text, dismissed)
+	VALUES (?, ?, 0)
+`);
+function createNotification(userId, message, type = 'New Event') {
+	createNotificationStmt.run(userId, message);
+}
+exports.createNotification = createNotification;
+
 const getUserNotificationsStmt = db.prepare(`
 	SELECT notification_id AS id, notification_text AS message, 
   CASE WHEN dismissed = 1 THEN 'Alert' ELSE 'Reminder' END AS type 

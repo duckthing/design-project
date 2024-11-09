@@ -83,6 +83,18 @@ CREATE TABLE IF NOT EXISTS events (
 			ON DELETE RESTRICT
 );
 
+CREATE TABLE IF NOT EXISTS event_rsvps (
+    rsvp_id INTEGER PRIMARY KEY,
+    event_id INTEGER NOT NULL,
+    user_account_id INTEGER NOT NULL,
+    rsvp_status TEXT NOT NULL CHECK (rsvp_status IN ('Going', 'Interested')),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_account_id) REFERENCES user_accounts (user_account_id) ON DELETE CASCADE,
+    UNIQUE (event_id, user_account_id) -- Enforces uniqueness for RSVP
+);
+
 CREATE INDEX idx_event_city
 ON events (city);
 
@@ -149,6 +161,15 @@ CREATE TABLE IF NOT EXISTS volunteer_history (
             ON DELETE CASCADE
 );
 
+CREATE TRIGGER IF NOT EXISTS notify_on_event_creation
+AFTER INSERT ON events
+BEGIN
+    INSERT INTO user_notifications (user_account_id, notification_text)
+    SELECT user_account_id, 'New event created: ' || NEW.event_name || ' on ' || date(NEW.event_date, 'unixepoch')
+    FROM user_accounts;
+END;
+
+-- Example insertions for testing
 -- INSERT INTO volunteer_history (user_account_id, event_name, event_date, required_skills, urgency, location, status)
 -- VALUES 
 --     (1, 'Beach Cleanup', '2024-10-01', 'Teamwork, Environmental Awareness', 'High', 'Santa Monica Beach', 'Completed'),
