@@ -112,11 +112,12 @@ if (dbSource.databaseJustCreated) {
 			stateCode: "TX",
 			urgent: false,
 			eventDate: new Date(2024, 0, 1),
+			description: "Help clean up the local beach!",
 			skillsRequired: [1, 2]
 		}
 	];
 
 	defaultEvents.forEach(function(e) {
-		createEvent(e.eventName, e.address, e.city, e.stateCode, e.urgent, e.eventDate, e.skillsRequired);
+		createEvent(e.eventName, e.address, e.city, e.stateCode, e.urgent, e.eventDate, e.description, e.skillsRequired);
 	});
 }

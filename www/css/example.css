@@ -208,6 +208,15 @@ button.cancel {
 	color: white;
 }
 
+textarea#description {
+		width: 100%;
+		padding: 8px;
+		margin-bottom: 10px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		resize: vertical;
+}
+
 /* Responsive Styling */
 @media (max-width: 600px) {
 	.nav-links {
@@ -279,3 +288,4 @@ button.cancel {
     background-color: #9E9E9E;
     color: white;
 }
+
