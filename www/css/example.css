@@ -257,3 +257,25 @@ button.cancel {
 			margin-bottom: 0.5em;
 	}
 }
+
+.rsvp-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.rsvp-status.going {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.rsvp-status.interested {
+    background-color: #2196F3;
+    color: white;
+}
+
+.rsvp-status.n-a {
+    background-color: #9E9E9E;
+    color: white;
+}

@@ -91,7 +91,9 @@ article {
 
 /* Event Card */
 .event-card {
-  padding: 1.5em;
+  display: flex;
+  gap: 2rem;
+  padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -137,6 +139,30 @@ article {
 
 .event-card button + button {
   margin-left: 10px;
+}
+
+.event-card.highlighted {
+  border: 3px solid #969494;
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.event-card.highlighted:hover {
+  transform: scale(1.03);
+}
+
+.event-main-info {
+  flex: 1;
+}
+
+.event-description {
+  flex: 1;
+  border-left: 1px solid #ccc;
+  padding-left: 20px;
+}
+
+.event-description h3 {
+  margin-top: 0;
 }
 
 /* Responsive Adjustments */

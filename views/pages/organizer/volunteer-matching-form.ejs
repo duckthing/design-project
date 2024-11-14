@@ -26,28 +26,32 @@
 			<h1>Assign volunteers</h1>
 			<!-- Personal info -->
 			<table>
-				<tr>
-					<th>Volunteer</th>
-					<th>Event</th>
-					<th>Actions</th>
-				</tr>
-				<% matches.forEach(function(match) { %>
+				<thead>
 					<tr>
-						<td><a href="/user/user-profile-management"><%=match.full_name%></a></td>
-						<td><%=match.event_name%></td>
-						<td class="eventActions">
-							<button class="accept">Assign</button>
-							<button>Ignore</button>
-						</td>
+						<th>Event Name</th>
+						<th>Volunteer Name</th>
+						<th>RSVP Status</th>
+						<th>Actions</th>
 					</tr>
-				<% }) %>
-				<% if (matches.length == 0) { %>
-					<tr>
-						<td>No matches</td>
-						<td>Create events or accounts to make matches</td>
-						<td></td>
-					</tr>
-				<% } %>
+				</thead>
+				<tbody>
+					<% matches.forEach(function(match) { %>
+						<tr>
+							<td><%= match.event_name %></td>
+							<td><%= match.full_name %></td>
+							<td>
+								<% const rsvpStatus = match.rsvp_status || 'N/A' %>
+								<span class="rsvp-status <%= rsvpStatus.toLowerCase().replace(' ', '-') %>">
+									<%= rsvpStatus %>
+								</span>
+							</td>
+							<td class="eventActions">
+								<button class="accept">Assign</button>
+								<button>Ignore</button>
+							</td>
+						</tr>
+					<% }); %>
+				</tbody>
 			</table>
 		</section>
 

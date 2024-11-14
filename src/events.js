@@ -54,20 +54,17 @@ function removeAllRequiredSkillsFromEventID(eventID) {
 exports.removeAllRequiredSkillsFromEventID = removeAllRequiredSkillsFromEventID;
 
 const createEventStmt = db.prepare(`
-	INSERT INTO events(event_name, address, city, state_code, urgent, event_date) VALUES (?, ?, ?, ?, ?, ?)
+	INSERT INTO events(event_name, address, city, state_code, urgent, event_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)
 `);
-function createEvent(eventName, address, city, stateCode, urgent, eventDate, skillsRequired) {
-	// Convert things into SQL values
+function createEvent(eventName, address, city, stateCode, urgent, eventDate, description, skillsRequired) {
 	const urgentVal = urgent ? 1 : 0;
 	let eventDateVal;
 	if (typeof eventDate == "object") {
-		// (most likely a Date object)
-		// Divide by 1000 to get seconds, not milliseconds
 		eventDateVal = Math.floor(eventDate.getTime() * 0.001);
 	} else {
 		eventDateVal = eventDate;
 	}
-	const info = createEventStmt.run(eventName, address, city, stateCode, urgentVal, eventDateVal);
+	const info = createEventStmt.run(eventName, address, city, stateCode, urgentVal, eventDateVal, description);
 	const eventID = info.lastInsertRowId;
 	skillsRequired.forEach(function(skillID) {
 		addRequiredSkillToEventID(eventID, skillID);
@@ -77,14 +74,16 @@ function createEvent(eventName, address, city, stateCode, urgent, eventDate, ski
 exports.createEvent = createEvent;
 
 const getAllVolunteerMatchesStmt = db.prepare(`
-	SELECT DISTINCT v.full_name, e.event_id, e.event_name
-	FROM user_accounts v, user_available_at a, events e
-	WHERE
-		v.user_account_id = a.user_account_id
-		AND
-		date(a.available_at, 'unixepoch') = date(e.event_date, 'unixepoch')
-	ORDER BY
-		e.event_id
+	SELECT DISTINCT 
+		v.full_name, 
+		e.event_id, 
+		e.event_name,
+		COALESCE(r.rsvp_status, 'N/A') as rsvp_status
+	FROM user_accounts v
+	INNER JOIN user_available_at a ON v.user_account_id = a.user_account_id
+	INNER JOIN events e ON date(a.available_at, 'unixepoch') = date(e.event_date, 'unixepoch')
+	LEFT JOIN event_rsvps r ON e.event_id = r.event_id AND v.user_account_id = r.user_account_id
+	ORDER BY e.event_id
 `);
 function getAllVolunteerMatches() {
 	const matches = getAllVolunteerMatchesStmt.all();

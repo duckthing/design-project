@@ -29,13 +29,14 @@ exports.post = function(req, res) {
 	const eventName = req.body.eventName;
 	const eventDate = new Date(req.body.eventDate);
 	const urgent = req.body.urgent === "on" ? 1 : 0;
+	const description = req.body.description;
 	const skillsRequired = Array.isArray(req.body.skillRequired) ? req.body.skillRequired : [req.body.skillRequired];
 	const address = req.body.address;
 	const city = req.body.city;
 	const stateCode = req.body.state;
 
 	try {
-		const eventId = events.createEvent(eventName, address, city, stateCode, urgent, eventDate, skillsRequired);
+		const eventId = events.createEvent(eventName, address, city, stateCode, urgent, eventDate, description, skillsRequired);
 
 		// Render success page with redirect script
 		res.render("pages/organizer/event-created-success", {

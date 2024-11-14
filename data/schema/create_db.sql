@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS events (
 	state_code			TEXT NOT NULL,
 	urgent				INTEGER NOT NULL,
 	event_date			INT NOT NULL,
+	description			TEXT,
 
 	FOREIGN KEY (state_code)
 		REFERENCES states (state_code)

@@ -37,20 +37,23 @@
 		<section id="featured-opportunities">
 			<h2>Featured Volunteer Opportunities</h2>
 			<div class="opportunity-list">
-				<div class="opportunity">
-					<h3>Beach Cleanup</h3>
-						<p>Help us clean up our beaches on October 1, 2024. Make a difference!</p>
-						<a href="./beach-cleanup-details" class="cta-button">Learn More</a>
-				</div>
-	
-				<div class="opportunity">
-					<h3>Community Garden</h3>
-						<p>Volunteer at our community garden and help grow food for those in need.</p>
-						<a href="./community-garden-details" class="cta-button">Learn More</a>
-				</div>
+				<% if (typeof featuredEvents !== 'undefined' && featuredEvents.length > 0) { %>
+					<% featuredEvents.forEach(function(event) { %>
+						<div class="opportunity">
+							<h3><%= event.event_name %></h3>
+							<p><strong>Location:</strong> <%= event.city %>, <%= event.state_code %></p>
+							<p><strong>Date:</strong> <%= new Date(event.event_date * (event.event_date < 10000000000 ? 1000 : 1)).toLocaleString() %></p>
+							<a href="/user/events-page?highlight=<%= event.event_id %>" class="cta-button">Learn More</a>
+						</div>
+					<% }); %>
+				<% } else { %>
+					<div class="opportunity">
+						<h3>No upcoming events</h3>
+						<p>Check back soon for new volunteer opportunities!</p>
+					</div>
+				<% } %>
 			</div>
-	</section>
-	
+		</section>
 
 		<section id="about-us">
 			<h2>About Us</h2>
