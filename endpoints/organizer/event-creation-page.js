@@ -36,10 +36,11 @@ exports.post = async function(req, res) {
 	const address = req.body.address;
 	const city = req.body.city;
 	const stateCode = req.body.state;
+	const zipcode = req.body.zipcode;
 
 	try {
 		console.log('Creating event...');
-		const eventId = events.createEvent(eventName, address, city, stateCode, urgent, eventDate, description, skillsRequired);
+		const eventId = events.createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skillsRequired);
 		
 		// Get all users
 		console.log('Fetching users with emails...');

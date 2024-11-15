@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS events (
 	address				TEXT NOT NULL,
 	city				TEXT NOT NULL,
 	state_code			TEXT NOT NULL,
+	zipcode				INTEGER NOT NULL,
 	urgent				INTEGER NOT NULL,
 	event_date			INT NOT NULL,
 	description			TEXT,
