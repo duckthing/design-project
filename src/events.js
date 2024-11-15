@@ -54,9 +54,9 @@ function removeAllRequiredSkillsFromEventID(eventID) {
 exports.removeAllRequiredSkillsFromEventID = removeAllRequiredSkillsFromEventID;
 
 const createEventStmt = db.prepare(`
-	INSERT INTO events(event_name, address, city, state_code, urgent, event_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)
+	INSERT INTO events(event_name, address, city, state_code, zipcode, urgent, event_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `);
-function createEvent(eventName, address, city, stateCode, urgent, eventDate, description, skillsRequired) {
+function createEvent(eventName, address, city, stateCode, zipCode, urgent, eventDate, description, skillsRequired) {
 	const urgentVal = urgent ? 1 : 0;
 	let eventDateVal;
 	if (typeof eventDate == "object") {
@@ -64,7 +64,7 @@ function createEvent(eventName, address, city, stateCode, urgent, eventDate, des
 	} else {
 		eventDateVal = eventDate;
 	}
-	const info = createEventStmt.run(eventName, address, city, stateCode, urgentVal, eventDateVal, description);
+	const info = createEventStmt.run(eventName, address, city, stateCode, zipCode, urgentVal, eventDateVal, description);
 	const eventID = info.lastInsertRowId;
 	skillsRequired.forEach(function(skillID) {
 		addRequiredSkillToEventID(eventID, skillID);
@@ -110,6 +110,7 @@ if (dbSource.databaseJustCreated) {
 			address: "123 Beach Street",
 			city: "Houston",
 			stateCode: "TX",
+			zipcode: 12345,
 			urgent: false,
 			eventDate: new Date(2024, 0, 1),
 			description: "Help clean up the local beach!",
@@ -118,6 +119,6 @@ if (dbSource.databaseJustCreated) {
 	];
 
 	defaultEvents.forEach(function(e) {
-		createEvent(e.eventName, e.address, e.city, e.stateCode, e.urgent, e.eventDate, e.description, e.skillsRequired);
+		createEvent(e.eventName, e.address, e.city, e.stateCode, e.zipcode, e.urgent, e.eventDate, e.description, e.skillsRequired);
 	});
 }

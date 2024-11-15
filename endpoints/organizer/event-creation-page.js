@@ -34,9 +34,10 @@ exports.post = function(req, res) {
 	const address = req.body.address;
 	const city = req.body.city;
 	const stateCode = req.body.state;
+	const zipcode = req.body.zipcode;
 
 	try {
-		const eventId = events.createEvent(eventName, address, city, stateCode, urgent, eventDate, description, skillsRequired);
+		const eventId = events.createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skillsRequired);
 
 		// Render success page with redirect script
 		res.render("pages/organizer/event-created-success", {

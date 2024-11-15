@@ -37,7 +37,7 @@ exports.get = function(req, res) {
 
 exports.post = function(req, res) {
 	if (req.session.user == null) return res.redirect("/login");
-	const { fullName, address1, address2, city, state, skills, preferences, availability } = req.body;
+	const { fullName, address1, address2, city, state, zipcode, skills, preferences, availability } = req.body;
 	
 	// Basic validation for required fields
 	if (!fullName || !address1 || !city || !state || !availability) {
@@ -50,7 +50,7 @@ exports.post = function(req, res) {
 		return res.status(400).send("Account does not exist.");
 	} else {
 		// Update the account and redirect back when done
-		accountsModule.updateUserAccountProfile(account.user_account_id, account.username, account.password, fullName, address1, address2, city, state, 0, preferences, skills.length > 0 ? skills.split(",") : [], [new Date(availability)]);
+		accountsModule.updateUserAccountProfile(account.user_account_id, account.username, account.password, fullName, address1, address2, city, state, zipcode, preferences, skills.length > 0 ? skills.split(",") : [], [new Date(availability)]);
 		return res.redirect("/user/user-profile-management");
 	}
 };
