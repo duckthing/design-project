@@ -224,6 +224,7 @@ if (dbSource.databaseJustCreated) {
 			address2: "",
 			city: "Houston",
 			state: "TX",
+			zipcode: 12345,
 			skills: [
 				"moving"
 			],
@@ -239,6 +240,7 @@ if (dbSource.databaseJustCreated) {
 			address2: "",
 			city: "Houston",
 			state: "TX",
+			zipcode: 56789,
 			skills: [
 				"skill1",
 				"moving",
