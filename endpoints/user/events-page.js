@@ -10,7 +10,7 @@ exports.get = function(req, res) {
     
     // Query to get all events with event_id included
     const events = db.prepare(`
-        SELECT event_id, event_name, event_date, address, city, state_code, urgent, description 
+        SELECT event_id, event_name, event_date, address, city, state_code, zipcode, urgent, description 
         FROM events
         ORDER BY event_date
     `).all();

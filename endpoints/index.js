@@ -16,8 +16,8 @@ exports.get = function(req, res) {
         LIMIT 3
     `).all();
 
-    // Log the events for debugging
-    console.log('Featured Events:', featuredEvents);
+/*  Log the events for debugging
+    console.log('Featured Events:', featuredEvents); */
 
     res.render("./pages/index.ejs", {
         featuredEvents: featuredEvents,

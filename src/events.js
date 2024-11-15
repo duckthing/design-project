@@ -54,6 +54,18 @@ function removeAllRequiredSkillsFromEventID(eventID) {
 exports.removeAllRequiredSkillsFromEventID = removeAllRequiredSkillsFromEventID;
 
 const createEventStmt = db.prepare(`
+	INSERT INTO events(
+		event_name, 
+		address, 
+		city, 
+		state_code, 
+		zipcode,
+		urgent, 
+		event_date, 
+		description
+	) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+`);
+function createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skillsRequired) {
 	INSERT INTO events(event_name, address, city, state_code, zipcode, urgent, event_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `);
 function createEvent(eventName, address, city, stateCode, zipCode, urgent, eventDate, description, skillsRequired) {
@@ -64,6 +76,18 @@ function createEvent(eventName, address, city, stateCode, zipCode, urgent, event
 	} else {
 		eventDateVal = eventDate;
 	}
+
+	const info = createEventStmt.run(
+		eventName, 
+		address, 
+		city, 
+		stateCode, 
+		zipcode,    // Add zipcode
+		urgentVal, 
+		eventDateVal, 
+		description
+	);
+
 	const info = createEventStmt.run(eventName, address, city, stateCode, zipCode, urgentVal, eventDateVal, description);
 	const eventID = info.lastInsertRowId;
 	skillsRequired.forEach(function(skillID) {

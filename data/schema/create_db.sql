@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS user_accounts (
 	user_account_id		INTEGER PRIMARY KEY,
 	username			TEXT NOT NULL UNIQUE,
 	password			TEXT NOT NULL,
+	email				TEXT UNIQUE,
 	full_name			TEXT NOT NULL,
 	address1			TEXT NOT NULL,
 	address2			TEXT NULL,

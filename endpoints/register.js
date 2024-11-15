@@ -4,7 +4,7 @@ exports.get = function(req, res) {
 }
 exports.post = function(req, res) {
     // Check for missing required fields
-	if (!req.body || !req.body.username || !req.body.password || !req.body.role) {
+	if (!req.body || !req.body.username || !req.body.password || !req.body.role || !req.body.email) {
 		res.send("Invalid data");
 		return;
 	}
@@ -12,6 +12,7 @@ exports.post = function(req, res) {
     // Extract fields from request body
 	const username = req.body.username;
 	const password = req.body.password;
+	const email = req.body.email;
 
 	console.log(req.body.role)
 	if (req.body.role == "volunteer") {
@@ -24,7 +25,7 @@ exports.post = function(req, res) {
 		const preferences = req.body.preferences;
 		const availability = new Date();
 
-		let success = accountsModule.createUserAccount(username, password, fullName, "", "", "TX", 0, "");
+		let success = accountsModule.createUserAccount(username, password, fullName, email, address1, city, state, 0, preferences);
 		if (success) {
 			req.session.user = {username: req.body.username};
 			res.redirect("user/user-profile-management");

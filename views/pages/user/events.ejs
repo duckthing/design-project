@@ -14,10 +14,16 @@
         </div>
         <div class="nav-links" id="nav-links">
             <a class="nav-link" href="/">Home</a>
+            
             <% if (session && session.isAuthenticated) { %>
-                <a class="nav-link" href="/user/user-profile-management">Profile</a>
-                <a class="nav-link" href="/user/notifications">Notifications</a>
-                <a class="nav-link" href="/organizer/volunteer-history">History</a>
+                <% if (session.organizer) { %>
+                    <a class="nav-link" href="/organizer/event-creation-page">Create Event</a>
+                    <a class="nav-link" href="/organizer/volunteer-matching-form">Match Volunteer</a>
+                <% } else { %>
+                    <a class="nav-link" href="/user/user-profile-management">Profile</a>
+                    <a class="nav-link" href="/user/notifications">Notifications</a>
+                    <a class="nav-link" href="/organizer/volunteer-history">History</a>
+                <% } %>
                 <a class="nav-link" href="/logout">Logout</a>
             <% } else { %>
                 <a class="nav-link" href="/login">Log in</a>
@@ -33,7 +39,10 @@
                     <div class="event-main-info">
                         <h2><%= event.event_name %></h2>
                         <p><strong>Date:</strong> <%= new Date(event.event_date * (event.event_date < 10000000000 ? 1000 : 1)).toLocaleString() %></p>
-                        <p><strong>Location:</strong> <%= event.city %>, <%= event.state_code %></p>
+                        <div class="event-location">
+                            <%= event.address %><br>
+                            <%= event.city %>, <%= event.state_code %> <%= event.zipcode %>
+                        </div>
                         <p><strong>Urgency:</strong> <%= event.urgent ? "High" : "Low" %></p>
                         
                         <button data-event-id="<%= event.event_id %>" data-status="Going" onclick="rsvpEvent(this)">I'm Going</button>
