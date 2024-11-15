@@ -66,9 +66,6 @@ const createEventStmt = db.prepare(`
 	) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `);
 function createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skillsRequired) {
-	INSERT INTO events(event_name, address, city, state_code, zipcode, urgent, event_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-`);
-function createEvent(eventName, address, city, stateCode, zipCode, urgent, eventDate, description, skillsRequired) {
 	const urgentVal = urgent ? 1 : 0;
 	let eventDateVal;
 	if (typeof eventDate == "object") {
@@ -88,7 +85,6 @@ function createEvent(eventName, address, city, stateCode, zipCode, urgent, event
 		description
 	);
 
-	const info = createEventStmt.run(eventName, address, city, stateCode, zipCode, urgentVal, eventDateVal, description);
 	const eventID = info.lastInsertRowId;
 	skillsRequired.forEach(function(skillID) {
 		addRequiredSkillToEventID(eventID, skillID);

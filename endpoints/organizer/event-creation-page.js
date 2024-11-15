@@ -70,7 +70,6 @@ exports.post = async function(req, res) {
 				console.error('Error sending email to', user.email, emailError);
 			}
 		}
-		const eventId = events.createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skillsRequired);
 		res.render("pages/organizer/event-created-success", {
 			eventName: eventName,
 			redirectUrl: "/organizer/volunteer-matching-form"
