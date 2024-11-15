@@ -57,16 +57,18 @@ exports.getUserAvailabilityFromUserID = getUserAvailabilityFromUserID;
 const createUserAccountStmt = db.prepare(`
 	INSERT INTO user_accounts(username, password, full_name, address1, city, state_code, zipcode, preferences) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `);	
-function createUserAccount(username, password, fullName, address1 = "", city = "", stateCode = "TX", zipcode = 0, preferences = "") {
-	// TODO: Validate input
-	const existingAccount = getUserByUsername(username);
-	if (existingAccount) {
-		// This account already exists
-		return null;
-	} else {
-		// Create the account
-		const info = createUserAccountStmt.run(username, password, fullName, address1, city, stateCode, zipcode, preferences);
-		return getUserByUserID(info.lastInsertRowid);
+function createUserAccount(username, password, fullName, email, address1, city, stateCode, zipcode, preferences) {
+	try {
+		const stmt = db.prepare(`
+			INSERT INTO user_accounts (username, password, full_name, email, address1, city, state_code, zipcode, preferences)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+		`);
+		
+		stmt.run(username, password, fullName, email, address1, city, stateCode, zipcode, preferences);
+		return true;
+	} catch (error) {
+		console.error("Error creating user account:", error);
+		return false;
 	}
 }
 exports.createUserAccount = createUserAccount;
@@ -217,6 +219,7 @@ if (dbSource.databaseJustCreated) {
 			username: "john",
 			password: "john",
 			fullName: "John Doe",
+			email: "john@example.com",
 			address1: "123 Real Street",
 			address2: "",
 			city: "Houston",
@@ -231,6 +234,7 @@ if (dbSource.databaseJustCreated) {
 			username: "user",
 			password: "user",
 			fullName: "User User",
+			email: "user@example.com",
 			address1: "123 Also Real Street",
 			address2: "",
 			city: "Houston",
@@ -245,8 +249,20 @@ if (dbSource.databaseJustCreated) {
 	];
 	
 	userData.forEach(function(d) {
-		const account = createUserAccount(d.username, d.password, d.fullName, d.address1, d.city, d.state, d.zipcode, d.preferences);
-		addAvailabilityToUserID(account.user_account_id, Math.floor(d.availability.getTime() * 0.001));
+		const account = createUserAccount(
+			d.username, 
+			d.password, 
+			d.fullName, 
+			d.email, 
+			d.address1, 
+			d.city, 
+			d.state, 
+			0, 
+			d.preferences
+		);
+		if (account) {
+			addAvailabilityToUserID(account.user_account_id, Math.floor(d.availability.getTime() * 0.001));
+		}
 	});
 
 	let organizerData = [
