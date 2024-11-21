@@ -13,18 +13,12 @@ exports.get = function(req, res) {
 		const userAvailability = accountsModule.getUserAvailabilityFromUserID(account.user_account_id);
 		const allSkills = skillsModule.getAllSkills();
 		const states = statesModule.states;
-		let date;
-		if (userAvailability[0] == null) {
-			date = new Date();
-		} else {
-			date = new Date();
-			date.setTime(userAvailability[0].available_at * 1000);
-		}
 
+		// userAvailability: date.toISOString().substring(0, 10)
 		return res.render("pages/user/user-profile-management", {
 			profile: account,
 			userSkills: userSkills,
-			userAvailability: date.toISOString().substring(0, 10),
+			userAvailability: userAvailability,
 			allSkills: allSkills,
 			allStates: states,
 			session: req.session,
@@ -40,8 +34,16 @@ exports.post = function(req, res) {
 	const { fullName, address1, address2, city, state, zipcode, skills, preferences, availability } = req.body;
 	
 	// Basic validation for required fields
-	if (!fullName || !address1 || !city || !state || !availability) {
+	if (!fullName || !address1 || !city || !state) {
 		return res.status(400).send("Please fill all required fields.");
+	}
+
+	let availabilities = [];
+	if (availability != null) {
+		const split = availability.split(",");
+		split.forEach(function(date) {
+			availabilities.push((new Date(date)).getTime() * 0.001);
+		});
 	}
 
 	const account = accountsModule.getUserByUsername(req.session.user.username);
@@ -50,7 +52,7 @@ exports.post = function(req, res) {
 		return res.status(400).send("Account does not exist.");
 	} else {
 		// Update the account and redirect back when done
-		accountsModule.updateUserAccountProfile(account.user_account_id, account.username, account.password, fullName, address1, address2, city, state, zipcode, preferences, skills.length > 0 ? skills.split(",") : [], [new Date(availability)]);
+		accountsModule.updateUserAccountProfile(account.user_account_id, account.username, account.password, fullName, address1, address2, city, state, zipcode, preferences, skills.length > 0 ? skills.split(",") : [], availabilities);
 		return res.redirect("/user/user-profile-management");
 	}
 };
