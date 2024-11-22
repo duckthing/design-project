@@ -1,84 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events</title>
-    <link rel="stylesheet" href="/css/events.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Events</title>
+	<link rel="stylesheet" href="/css/events.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <%- include('../../components/navbar', {session: session}) %>
+	<!-- Navbar -->
+	<%- include('../../components/navbar', {session: session}) %>
 
-    <!-- Events List -->
-    <div class="center">
-        <div class="events-list">
-            <% events.forEach(event => { %>
-                <div id="eventDiv<%= event.event_id %>" class="event-card <%= (typeof highlightedEventId !== 'undefined' && event.event_id.toString() === highlightedEventId) ? 'highlighted' : '' %>">
-                    <div class="event-main-info">
-                        <h2><%= event.event_name %></h2>
-                        <p><strong>Date:</strong> <%= new Date(event.event_date * (event.event_date < 10000000000 ? 1000 : 1)).toLocaleString() %></p>
-                        <div class="event-location">
-                            <%= event.address %><br>
-                            <%= event.city %>, <%= event.state_code %> <%= event.zipcode %>
-                        </div>
-                        <p><strong>Urgency:</strong> <%= event.urgent ? "High" : "Low" %></p>
-                        
-                        <button data-event-id="<%= event.event_id %>" data-status="Interested" onclick="rsvpEvent(this)">RSVP</button>
-                        <button data-event-id="<%= event.event_id %>" data-status="NotInterested" onclick="rsvpEvent(this)">Not Interested</button>
-                    </div>
-                    <div class="event-description">
-                        <h3>Description</h3>
-                        <p><%= event.description %></p>
-                    </div>
-                </div>
-            <% }) %>
+	<!-- Events List -->
+	<div class="center">
+		<div class="events-list">
+			<% events.forEach(event => { %>
+				<div id="eventDiv<%= event.event_id %>" class="event-card <%= (typeof highlightedEventId !== 'undefined' && event.event_id.toString() === highlightedEventId) ? 'highlighted' : '' %>">
+					<div class="event-main-info">
+						<h2><%= event.event_name %></h2>
+						<p><strong>Date:</strong> <%= new Date(event.event_date * (event.event_date < 10000000000 ? 1000 : 1)).toLocaleString() %></p>
+						<div class="event-location">
+							<%= event.address %><br>
+							<%= event.city %>, <%= event.state_code %> <%= event.zipcode %>
+						</div>
+						<p><strong>Urgency:</strong> <%= event.urgent ? "High" : "Low" %></p>
+						
+						<button data-event-id="<%= event.event_id %>" data-status="Interested" onclick="rsvpEvent(this)">RSVP</button>
+						<button data-event-id="<%= event.event_id %>" data-status="NotInterested" onclick="rsvpEvent(this)">Not Interested</button>
+					</div>
+					<div class="event-description">
+						<h3>Description</h3>
+						<p><%= event.description %></p>
+					</div>
+				</div>
+			<% }) %>
 			<% if (events.length == 0) {%>
 				<h2>No events, check later</h2>
 			<% } %>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <!-- RSVP Script -->
-    <script>
-        async function rsvpEvent(button) {
-            const eventId = button.getAttribute('data-event-id');
-            const status = button.getAttribute('data-status');
+	<!-- RSVP Script -->
+	<script>
+		async function rsvpEvent(button) {
+			const eventId = button.getAttribute('data-event-id');
+			const status = button.getAttribute('data-status');
 
-            if (!eventId) {
-                alert("Event ID is missing!");
-                return;
-            }
+			if (!eventId) {
+				alert("Event ID is missing!");
+				return;
+			}
 
-            try {
-                const response = await fetch('/user/event-rsvp', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ eventId, status }),
-                });
+			try {
+				const response = await fetch('/user/event-rsvp', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ eventId, status }),
+				});
 
-                if (response.ok) {
+				if (response.ok) {
 					// Remove the event
 					const divContainer = document.getElementById("eventDiv" + eventId);
 					divContainer.remove();
-                    alert(`Event successfully marked as '${button.innerText}'`);
-                } else {
-                    const errorText = await response.text();
-                    alert('Failed to RSVP: ' + errorText);
-                }
-            } catch (error) {
-                console.error('Error RSVPing:', error);
-                alert('Error processing RSVP.');
-            }
-        }
+					alert(`Event successfully marked as '${button.innerText}'`);
+				} else {
+					const errorText = await response.text();
+					alert('Failed to RSVP: ' + errorText);
+				}
+			} catch (error) {
+				console.error('Error RSVPing:', error);
+				alert('Error processing RSVP.');
+			}
+		}
 
-        // Mobile navigation toggle
-        document.getElementById("nav-toggle-btn").addEventListener("click", function() {
-            const navLinks = document.getElementById("nav-links");
-            navLinks.classList.toggle("show");
-        });
-    </script>
+		// Mobile navigation toggle
+		document.getElementById("nav-toggle-btn").addEventListener("click", function() {
+			const navLinks = document.getElementById("nav-links");
+			navLinks.classList.toggle("show");
+		});
+	</script>
 </body>
 </html>

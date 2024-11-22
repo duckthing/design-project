@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS event_rsvps (
     rsvp_id INTEGER PRIMARY KEY,
     event_id INTEGER NOT NULL,
     user_account_id INTEGER NOT NULL,
-    rsvp_status TEXT NOT NULL CHECK (rsvp_status IN ('Confirmed', 'Interested', 'NotInterested')),
+    rsvp_status TEXT NOT NULL CHECK (rsvp_status IN ('Confirmed', 'Rejected', 'Interested', 'NotInterested')),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,

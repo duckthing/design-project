@@ -18,8 +18,10 @@ exports.get = function(req, res) {
     // Query to get all events with event_id included
     const events = db.prepare(`
         SELECT e.event_id, e.event_name, e.event_date, e.address, e.city, e.state_code, e.zipcode, e.urgent, e.description 
-        FROM events e
-			LEFT JOIN event_rsvps r ON r.event_id = e.event_id
+        FROM
+			user_accounts v,
+			events e
+				LEFT JOIN event_rsvps r ON r.event_id = e.event_id AND r.user_account_id = v.user_account_id
 		WHERE
 			r.event_id IS NULL AND
 			e.event_date > unixepoch()
