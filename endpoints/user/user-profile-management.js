@@ -12,7 +12,7 @@ exports.get = function (req, res) {
   try {
     const user = accountsModule.getUserByUsername(req.session.user.username);
     const allSkills = skillsModule.getAllSkills();
-    const allStates = statesModule.states; // Updated here
+    const allStates = statesModule.states;
     const userSkills = accountsModule.getSkillsByUserID(user.user_account_id);
     const userAvailability = accountsModule.getAvailabilityByUserID(user.user_account_id);
 

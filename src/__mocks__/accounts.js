@@ -18,22 +18,12 @@ module.exports = {
     }
     return null;
   }),
-  getOrganizerByUsername: jest.fn((username) => {
-    if (username === 'organizer') {
-      return {
-        organizer_account_id: 1,
-        username: 'organizer',
-        password: 'organizer',
-      };
-    }
-    return null;
-  }),
-  getUserNotifications: jest.fn((user_account_id) => [
-    {
-      id: 'notif1',
-      message: 'Test notification',
-      type: 'New Event',
-    },
+  getSkillsByUserID: jest.fn(() => [
+    { skill_id: 1, skill_name: 'Skill1' },
+    // Add more mock skills as needed
+  ]),
+  getAvailabilityByUserID: jest.fn(() => [
+    { available_at: 1700000000 }, // Mocked timestamp
   ]),
   updateUserAccountProfile: jest.fn(),
   getSkillsByUserID: jest.fn(() => [

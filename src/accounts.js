@@ -1,268 +1,238 @@
 // src/accounts.js
-const dbSource = require("./dbSource");
-const db = dbSource.db;
 
+const db = require('./dbSource');
+const bcrypt = require('bcrypt');
+
+// Function to get a user by username
 function getUserByUsername(username) {
   const stmt = db.prepare(`
-    SELECT * FROM user_accounts WHERE username = ?
+    SELECT *
+    FROM user_accounts
+    WHERE username = ?
   `);
-  return stmt.get(username);
+  const user = stmt.get(username);
+  return user || null;
 }
-exports.getUserByUsername = getUserByUsername;
 
-function getUserByUserID(userID) {
-  const stmt = db.prepare(`
-    SELECT * FROM user_accounts WHERE user_account_id = ?
-  `);
-  return stmt.get(userID);
-}
-exports.getUserByUserID = getUserByUserID;
-
-function getUserSkillsFromUserID(userID) {
-  const stmt = db.prepare(`
-    SELECT s.skill_id, s.skill_name 
-    FROM has_skills h 
-    INNER JOIN skills s ON h.skill_id = s.skill_id 
-    WHERE h.user_account_id = ?
-  `);
-  return stmt.all(userID);
-}
-exports.getUserSkillsFromUserID = getUserSkillsFromUserID;
-
-function getUserAvailabilityFromUserID(userID) {
-  const stmt = db.prepare(`
-    SELECT available_at 
-    FROM user_available_at 
-    WHERE user_account_id = ?
-  `);
-  return stmt.all(userID);
-}
-exports.getUserAvailabilityFromUserID = getUserAvailabilityFromUserID;
-
-function createUserAccount(username, password, fullName, email, address1, city, stateCode, zipcode, preferences) {
-  const stmt = db.prepare(`
-    INSERT INTO user_accounts (username, password, full_name, email, address1, city, state_code, zipcode, preferences)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-  stmt.run(username, password, fullName, email, address1, city, stateCode, zipcode, preferences);
-  return getUserByUsername(username);
-}
-exports.createUserAccount = createUserAccount;
-
-function addSkillToUserID(userID, skillID) {
-  const stmt = db.prepare(`
-    INSERT INTO has_skills(user_account_id, skill_id) VALUES (?, ?)
-  `);
-  stmt.run(userID, skillID);
-}
-exports.addSkillToUserID = addSkillToUserID;
-
-function addAvailabilityToUserID(userID, date) {
-  const stmt = db.prepare(`
-    INSERT INTO user_available_at(user_account_id, available_at) VALUES (?, ?)
-  `);
-  stmt.run(userID, date);
-}
-exports.addAvailabilityToUserID = addAvailabilityToUserID;
-
-function removeAllSkillsFromUserID(userID) {
-  const stmt = db.prepare(`
-    DELETE FROM has_skills WHERE user_account_id = ?
-  `);
-  stmt.run(userID);
-}
-exports.removeAllSkillsFromUserID = removeAllSkillsFromUserID;
-
-function removeAllAvailabilityFromUserID(userID) {
-  const stmt = db.prepare(`
-    DELETE FROM user_available_at WHERE user_account_id = ?
-  `);
-  stmt.run(userID);
-}
-exports.removeAllAvailabilityFromUserID = removeAllAvailabilityFromUserID;
-
-function updateUserAccountProfile(userID, username, password, fullName, address1, address2, city, stateCode, zipcode, preferences, skillIDs, availability) {
-  const stmt = db.prepare(`
-    UPDATE user_accounts
-    SET username = ?, password = ?, full_name = ?, address1 = ?, address2 = ?, city = ?, state_code = ?, zipcode = ?, preferences = ?
-    WHERE user_account_id = ?
-  `);
-  stmt.run(username, password, fullName, address1, address2, city, stateCode, zipcode, preferences, userID);
-
-  removeAllSkillsFromUserID(userID);
-  removeAllAvailabilityFromUserID(userID);
-
-  skillIDs.forEach(skillID => {
-    addSkillToUserID(userID, skillID);
-  });
-
-  availability.forEach(date => {
-    addAvailabilityToUserID(userID, date);
-  });
-}
-exports.updateUserAccountProfile = updateUserAccountProfile;
-
+// Function to get an organizer by username
 function getOrganizerByUsername(username) {
   const stmt = db.prepare(`
-    SELECT * FROM organizer_accounts WHERE username = ?
+    SELECT *
+    FROM organizer_accounts
+    WHERE username = ?
   `);
-  return stmt.get(username);
+  const organizer = stmt.get(username);
+  return organizer || null;
 }
-exports.getOrganizerByUsername = getOrganizerByUsername;
 
-function getOrganizerByUserID(userID) {
+// Function to create a new user account
+function createUserAccount(
+  username,
+  password,
+  fullName,
+  address1,
+  address2,
+  city,
+  state,
+  zipcode,
+  preferences
+) {
+  const hashedPassword = bcrypt.hashSync(password, 10);
+
   const stmt = db.prepare(`
-    SELECT * FROM organizer_accounts WHERE organizer_account_id = ?
+    INSERT INTO user_accounts (
+      username,
+      password,
+      full_name,
+      address1,
+      address2,
+      city,
+      state,
+      zipcode,
+      preferences
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
-  return stmt.get(userID);
-}
-exports.getOrganizerByUserID = getOrganizerByUserID;
 
+  const result = stmt.run(
+    username,
+    hashedPassword,
+    fullName,
+    address1,
+    address2,
+    city,
+    state,
+    zipcode,
+    preferences
+  );
+
+  return { user_account_id: result.lastInsertRowid };
+}
+
+// Function to create a new organizer account
 function createOrganizerAccount(username, password) {
-  const existingAccount = getOrganizerByUsername(username);
-  if (existingAccount) {
-    return null;
+  const hashedPassword = bcrypt.hashSync(password, 10);
+
+  const stmt = db.prepare(`
+    INSERT INTO organizer_accounts (
+      username,
+      password
+    )
+    VALUES (?, ?)
+  `);
+
+  const result = stmt.run(username, hashedPassword);
+
+  return { organizer_account_id: result.lastInsertRowid };
+}
+
+// Function to update user account profile
+function updateUserAccountProfile(
+  user_account_id,
+  username,
+  password,
+  fullName,
+  address1,
+  address2,
+  city,
+  state,
+  zipcode,
+  preferences,
+  skills,
+  availability
+) {
+  const updateStmt = db.prepare(`
+    UPDATE user_accounts
+    SET
+      full_name = ?,
+      address1 = ?,
+      address2 = ?,
+      city = ?,
+      state = ?,
+      zipcode = ?,
+      preferences = ?
+    WHERE user_account_id = ?
+  `);
+
+  updateStmt.run(
+    fullName,
+    address1,
+    address2,
+    city,
+    state,
+    zipcode,
+    preferences,
+    user_account_id
+  );
+
+  // Update skills
+  const deleteSkillsStmt = db.prepare(`
+    DELETE FROM user_skills
+    WHERE user_account_id = ?
+  `);
+  deleteSkillsStmt.run(user_account_id);
+
+  const insertSkillStmt = db.prepare(`
+    INSERT INTO user_skills (user_account_id, skill_id)
+    VALUES (?, ?)
+  `);
+
+  skills.forEach((skill_id) => {
+    insertSkillStmt.run(user_account_id, skill_id);
+  });
+
+  // Update availability
+  const deleteAvailabilityStmt = db.prepare(`
+    DELETE FROM user_availability
+    WHERE user_account_id = ?
+  `);
+  deleteAvailabilityStmt.run(user_account_id);
+
+  const insertAvailabilityStmt = db.prepare(`
+    INSERT INTO user_availability (user_account_id, available_at)
+    VALUES (?, ?)
+  `);
+
+  availability.forEach((dateStr) => {
+    const date = new Date(dateStr);
+    const timestamp = Math.floor(date.getTime() / 1000);
+    insertAvailabilityStmt.run(user_account_id, timestamp);
+  });
+}
+
+// Function to get skills by user ID
+function getSkillsByUserID(user_account_id) {
+  const stmt = db.prepare(`
+    SELECT s.skill_id, s.skill_name
+    FROM user_skills us
+    JOIN skills s ON us.skill_id = s.skill_id
+    WHERE us.user_account_id = ?
+  `);
+  const skills = stmt.all(user_account_id);
+  return skills;
+}
+
+// Function to get availability by user ID
+function getAvailabilityByUserID(user_account_id) {
+  const stmt = db.prepare(`
+    SELECT available_at
+    FROM user_availability
+    WHERE user_account_id = ?
+  `);
+  const availability = stmt.all(user_account_id);
+  return availability;
+}
+
+// Function to get user notifications
+function getUserNotifications(user_account_id) {
+  const stmt = db.prepare(`
+    SELECT *
+    FROM notifications
+    WHERE user_account_id = ?
+  `);
+  const notifications = stmt.all(user_account_id);
+  return notifications;
+}
+
+// Function to dismiss a notification
+function dismissNotification(notification_id) {
+  const stmt = db.prepare(`
+    DELETE FROM notifications
+    WHERE notification_id = ?
+  `);
+  stmt.run(notification_id);
+}
+
+// Function to verify user password
+function verifyUserPassword(username, password) {
+  const user = getUserByUsername(username);
+  if (user && bcrypt.compareSync(password, user.password)) {
+    return user;
   }
-  const stmt = db.prepare(`
-    INSERT INTO organizer_accounts(username, password) VALUES (?,?)
-  `);
-  stmt.run(username, password);
-  return getOrganizerByUsername(username);
+  return null;
 }
-exports.createOrganizerAccount = createOrganizerAccount;
 
-function getAllUsers() {
-  const stmt = db.prepare("SELECT user_account_id FROM user_accounts");
-  return stmt.all();
+// Function to verify organizer password
+function verifyOrganizerPassword(username, password) {
+  const organizer = getOrganizerByUsername(username);
+  if (organizer && bcrypt.compareSync(password, organizer.password)) {
+    return organizer;
+  }
+  return null;
 }
-exports.getAllUsers = getAllUsers;
 
-function createNotification(userId, message, type = 'New Event') {
-  const stmt = db.prepare(`
-    INSERT INTO user_notifications (user_account_id, notification_text, dismissed)
-    VALUES (?, ?, 0)
-  `);
-  stmt.run(userId, message);
-}
-exports.createNotification = createNotification;
-
-function getUserNotifications(userID) {
-  const stmt = db.prepare(`
-    SELECT notification_id AS id, notification_text AS message, 
-    CASE WHEN dismissed = 1 THEN 'Alert' ELSE 'Reminder' END AS type 
-    FROM user_notifications 
-    WHERE user_account_id = ? 
-    ORDER BY notification_id DESC
-  `);
-  return stmt.all(userID);
-}
-exports.getUserNotifications = getUserNotifications;
-
-function validateUserCredentials(username, password) {
-  const account = getUserByUsername(username);
-  return account && account.password === password;
-}
-exports.validateUserCredentials = validateUserCredentials;
-
-function validateOrganizerCredentials(username, password) {
-  const account = getOrganizerByUsername(username);
-  return account && account.password === password;
-}
-exports.validateOrganizerCredentials = validateOrganizerCredentials;
-
-// Default data for the database
-if (dbSource.databaseJustCreated) {
-  const userData = [
-    {
-      username: "john",
-      password: "john",
-      fullName: "John Doe",
-      email: "john@example.com",
-      address1: "123 Real Street",
-      address2: "",
-      city: "Houston",
-      state: "TX",
-      zipcode: "12345",
-      skills: [],
-      preferences: "No preferences",
-      availability: [Math.floor(new Date(2024, 0, 1).getTime() / 1000)],
-    },
-    {
-      username: "user",
-      password: "user",
-      fullName: "User User",
-      email: "user@example.com",
-      address1: "123 Also Real Street",
-      address2: "",
-      city: "Houston",
-      state: "TX",
-      zipcode: "56789",
-      skills: [],
-      preferences: "No preferences",
-      availability: [Math.floor(new Date(2024, 0, 2).getTime() / 1000)],
-    },
-  ];
-
-  userData.forEach(d => {
-    const account = createUserAccount(
-      d.username,
-      d.password,
-      d.fullName,
-      d.email,
-      d.address1,
-      d.city,
-      d.state,
-      d.zipcode,
-      d.preferences
-    );
-
-    if (account) {
-      d.skills.forEach(skill => {
-        addSkillToUserID(account.user_account_id, skill);
-      });
-      d.availability.forEach(date => {
-        addAvailabilityToUserID(account.user_account_id, date);
-      });
-    }
-  });
-
-  const volunteerHistoryData = [
-    {
-      user_account_id: 2,
-      event_name: "Beach Cleanup",
-      event_date: "2024-10-01",
-      required_skills: "Teamwork, Environmental Awareness",
-      urgency: "High",
-      location: "Santa Monica Beach",
-      status: "Completed"
-    },
-    {
-      user_account_id: 2,
-      event_name: "Community Food Giveaway",
-      event_date: "2024-09-20",
-      required_skills: "Teamwork",
-      urgency: "High",
-      location: "Discovery Green",
-      status: "Completed"
-    },
-  ];
-
-  volunteerHistoryData.forEach(d => {
-    const stmt = db.prepare(`
-      INSERT INTO volunteer_history (user_account_id, event_name, event_date, required_skills, urgency, location, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `);
-    stmt.run(d.user_account_id, d.event_name, d.event_date, d.required_skills, d.urgency, d.location, d.status);
-  });
-
-  const organizerData = [
-    {
-      username: "organizer",
-      password: "organizer"
-    }
-  ];
-
-  organizerData.forEach(d => {
-    createOrganizerAccount(d.username, d.password);
-  });
-}
+// Export all functions
+module.exports = {
+  getUserByUsername,
+  getOrganizerByUsername,
+  createUserAccount,
+  createOrganizerAccount,
+  updateUserAccountProfile,
+  getSkillsByUserID,
+  getAvailabilityByUserID,
+  getUserNotifications,
+  dismissNotification,
+  verifyUserPassword,
+  verifyOrganizerPassword,
+  // Add other exports as needed
+};
