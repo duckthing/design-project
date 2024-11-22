@@ -17,10 +17,10 @@ exports.post = function(req, res) {
 	console.log(req.body.role)
 	if (req.body.role == "volunteer") {
 		const fullName = req.body.fullName;
-		const address1 = req.body.address1;
+		const address1 = req.body.address1 || '';
 		const address2 = req.body.address2 || ''; // optional field
-		const city = req.body.city;
-		const state = req.body.state;
+		const city = req.body.city || '';
+		const state = req.body.state || 'TX';
 		const skills = []; // Not provided, so initialize as an empty array
 		const preferences = req.body.preferences;
 		const availability = new Date();
