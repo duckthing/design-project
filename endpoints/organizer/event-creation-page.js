@@ -39,43 +39,44 @@ exports.post = async function(req, res) {
 	const zipcode = req.body.zipcode;
 
 	try {
-		console.log('Creating event...');
+		// Create the event first
+		console.log('Creating event in database...');
 		const eventId = events.createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skills);
-		
-		// Get all users
+		console.log('Event created successfully with ID:', eventId);
+	
+		// Send emails after successful creation
 		console.log('Fetching users with emails...');
 		const users = db.prepare(`
 			SELECT email 
 			FROM user_accounts 
 			WHERE email IS NOT NULL AND email != ''
 		`).all();
-		console.log('Found users:', users);
-		
-		if (users.length === 0) {
-			console.log('No users with email addresses found');
-		}
-		
-		// Send test emails
-		for (const user of users) {
-			console.log('Processing email for user:', user.email);
-			try {
-				const emailInfo = await emailService.sendEventNotification(user.email, {
-					eventName,
-					eventDate,
-					city,
-					stateCode
-				});
-				console.log(`Email sent successfully to ${user.email}`);
-			} catch (emailError) {
-				console.error('Error sending email to', user.email, emailError);
+	
+		if (users.length > 0) {
+			console.log('Sending emails to users...');
+			for (const user of users) {
+				try {
+					await emailService.sendEventNotification(user.email, {
+						eventName,
+						eventDate,
+						city,
+						stateCode
+					});
+					console.log(`Email sent successfully to ${user.email}`);
+				} catch (emailError) {
+					console.error('Error sending email to', user.email, emailError);
+				}
 			}
+		} else {
+			console.log('No users with email addresses found.');
 		}
+	
 		res.render("pages/organizer/event-created-success", {
-			eventName: eventName,
-			redirectUrl: "/organizer/volunteer-matching-form"
+			eventName,
+			redirectUrl: "/organizer/volunteer-matching-form",
 		});
 	} catch (error) {
 		console.error("Error creating event or sending notifications:", error);
 		res.status(500).send("Error creating event");
-	}
+	}	
 };

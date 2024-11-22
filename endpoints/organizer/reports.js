@@ -1,13 +1,16 @@
+const fs = require("fs");
+const path = require("path");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+const PDFDocument = require("pdfkit"); // Import PDFKit
 const db = require("../../src/dbSource").db;
 
-exports.get = function(req, res) {
+exports.get = function (req, res) {
 	// if (!req.session.isAuthenticated) {
 	// 	return res.redirect('/login');
 	// }
 
 	res.render("./pages/organizer/reports", {
-		session: req.session
+		session: req.session,
 	});
 };
 
@@ -27,8 +30,7 @@ const stmtGetParticipation = db.prepare(`
 		r.rsvp_status = 'Confirmed'
 `);
 function getParticipationRecords() {
-	const results = stmtGetParticipation.all()
-	return results
+	return stmtGetParticipation.all();
 }
 
 const stmtGetAssignments = db.prepare(`
@@ -48,52 +50,96 @@ const stmtGetAssignments = db.prepare(`
 		r.rsvp_status = 'Confirmed'
 `);
 function getAssignmentRecords() {
-	const results = stmtGetAssignments.all()
-	return results
+	return stmtGetAssignments.all();
 }
 
-exports.post = function(req, res) {
-	// if (!req.session.isAuthenticated) {
-	// 	return res.redirect('/login');
-	// }
+exports.post = function (req, res) {
+	// Ensure the temp directory exists
+	const tempDir = path.join(__dirname, "../../temp");
+	if (!fs.existsSync(tempDir)) {
+		fs.mkdirSync(tempDir, { recursive: true });
+	}
 
-	const { fromDate, toDate, reportType, reportFormat } = req.body;
-	const fileExtension = reportFormat == "csv" ? ".csv" : ".pdf"
-	const filePath = "./temp/data-" + (new Date()).getTime() + fileExtension;
+	const { reportType, reportFormat } = req.body;
+	const fileExtension = reportFormat === "csv" ? ".csv" : ".pdf";
+	const filePath = path.join(tempDir, "data-" + Date.now() + fileExtension);
 
+	if (reportFormat === "csv") {
+		// CSV Generation
+		if (reportType === "participationHistory") {
+			const csvWriter = createCsvWriter({
+				path: filePath,
+				header: [
+					{ id: "user_account_id", title: "Volunteer ID" },
+					{ id: "event_id", title: "Event ID" },
+					{ id: "full_name", title: "Volunteer Name" },
+					{ id: "event_name", title: "Event" },
+				],
+			});
+			csvWriter.writeRecords(getParticipationRecords()).then(() => {
+				res.download(filePath);
+			});
+		} else if (reportType === "eventAssignments") {
+			const csvWriter = createCsvWriter({
+				path: filePath,
+				header: [
+					{ id: "user_account_id", title: "Volunteer ID" },
+					{ id: "event_id", title: "Event ID" },
+					{ id: "full_name", title: "Volunteer Name" },
+					{ id: "event_name", title: "Event" },
+					{ id: "rsvp_status", title: "RSVP Status" },
+				],
+			});
+			csvWriter.writeRecords(getAssignmentRecords()).then(() => {
+				res.download(filePath);
+			});
+		} else {
+			res.send("Invalid report type");
+		}
+	} else if (reportFormat === "pdf") {
+		// PDF Generation
+		const doc = new PDFDocument();
+		const writeStream = fs.createWriteStream(filePath);
+		doc.pipe(writeStream);
 
-	if (reportType == "participationHistory") {
-		// File with all the events the volunteer was confirmed to go to
-		const csvWriter = createCsvWriter({
-			path: filePath,
-			header: [
-				{id: "user_account_id", title: "Volunteer ID"},
-				{id: "event_id", title: "Event ID"},
-				{id: "full_name", title: "Volunteer Name"},
-				{id: "event_name", title: "Event"}
-			]
-		});
-		csvWriter.writeRecords(getParticipationRecords()).then(() => {
-			res.download(filePath);
-		});
-	} else if (reportType == "eventAssignments") {
-		// File with the assigment statuses of 
-		const csvWriter = createCsvWriter({
-			path: filePath,
-			header: [
-				{id: "user_account_id", title: "Volunteer ID"},
-				{id: "event_id", title: "Event ID"},
-				{id: "full_name", title: "Volunteer Name"},
-				{id: "event_name", title: "Event"},
-				{id: "rsvp_status", title: "RSVP Status"}
-			]
-		});
+		// Add PDF content based on report type
+		if (reportType === "participationHistory") {
+			const records = getParticipationRecords();
+			doc.fontSize(16).text("Participation History Report", { align: "center" });
+			doc.moveDown();
+			records.forEach((record) => {
+				doc
+					.fontSize(12)
+					.text(
+						`Volunteer ID: ${record.user_account_id}, Event ID: ${record.event_id}, Volunteer Name: ${record.full_name}, Event: ${record.event_name}`
+					);
+				doc.moveDown();
+			});
+		} else if (reportType === "eventAssignments") {
+			const records = getAssignmentRecords();
+			doc.fontSize(16).text("Event Assignments Report", { align: "center" });
+			doc.moveDown();
+			records.forEach((record) => {
+				doc
+					.fontSize(12)
+					.text(
+						`Volunteer ID: ${record.user_account_id}, Event ID: ${record.event_id}, Volunteer Name: ${record.full_name}, Event: ${record.event_name}, RSVP Status: ${record.rsvp_status}`
+					);
+				doc.moveDown();
+			});
+		} else {
+			res.send("Invalid report type");
+			return;
+		}
 
-		csvWriter.writeRecords(getAssignmentRecords()).then(() => {
-			res.download(filePath);
+		doc.end();
+
+		writeStream.on("finish", () => {
+			res.download(filePath, (err) => {
+				if (!err) fs.unlinkSync(filePath); // Clean up file after download
+			});
 		});
 	} else {
-		res.send("Invalid report type");
-		return
+		res.status(400).send("Invalid report format");
 	}
-}
+};

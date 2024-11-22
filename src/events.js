@@ -67,19 +67,28 @@ const createEventStmt = db.prepare(`
 `);
 function createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skillsRequired) {
 	const urgentVal = urgent ? 1 : 0;
-	let eventDateVal;
-	if (typeof eventDate == "object") {
-		eventDateVal = Math.floor(eventDate.getTime() * 0.001);
-	} else {
-		eventDateVal = eventDate;
+	const eventDateVal = typeof eventDate === "object" 
+		? Math.floor(eventDate.getTime() / 1000) 
+		: eventDate;
+
+	// Check for existing event
+	const existingEvent = db.prepare(`
+		SELECT event_id FROM events 
+		WHERE event_name = ? AND event_date = ?
+	`).get(eventName, eventDateVal);
+
+	if (existingEvent) {
+		console.log(`Event already exists with ID: ${existingEvent.event_id}`);
+		return existingEvent; // Return the existing event
 	}
 
+	// Insert new event
 	const info = createEventStmt.run(
 		eventName, 
 		address, 
 		city, 
 		stateCode, 
-		zipcode,    // Add zipcode
+		zipcode,
 		urgentVal, 
 		eventDateVal, 
 		description
@@ -91,6 +100,7 @@ function createEvent(eventName, address, city, stateCode, zipcode, urgent, event
 	});
 	return getEventByEventID(eventID);
 }
+
 exports.createEvent = createEvent;
 
 // TODO: Make it return only future events

@@ -42,7 +42,7 @@ exports.get = function(req, res) {
   const historyData = db.prepare(`
     SELECT event_name AS eventName, event_date AS date, required_skills AS requiredSkills, urgency, location, status 
     FROM volunteer_history
-    WHERE user_account_id = ? AND status = 'Completed'
+    WHERE user_account_id = ? AND status IN ('Completed', 'Upcoming', 'In Progress', 'Not Started')
   `).all(userId);
 
 	const errors = [];
