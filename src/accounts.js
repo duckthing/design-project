@@ -123,7 +123,6 @@ function updateUserAccountProfile(userID, username, password, fullName, address1
 		if (typeof date == "object") {
 			// (most likely a Date object)
 			// Divide by 1000 to get seconds, not milliseconds
-			
 			realDateVal = Math.floor(date.getTime() * 0.001);
 		} else {
 			// If it's a number

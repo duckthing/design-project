@@ -39,7 +39,8 @@ exports.post = function(req, res) {
 	}
 
 	let availabilities = [];
-	if (availability != null) {
+	console.log(availability);
+	if (availability != null && availability.trim().length > 1) {
 		const split = availability.split(",");
 		split.forEach(function(date) {
 			availabilities.push((new Date(date)).getTime() * 0.001);
