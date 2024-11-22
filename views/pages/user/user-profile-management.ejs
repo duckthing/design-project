@@ -78,22 +78,22 @@
 										<% }) %>
 									</select>
 								</label>
-								<button type="button" id="addSkill" onclick="userprefsAddSkill()">Add Skill</button>
-								<br>
-								<!-- Where the skills get added -->
-								<table id="selectedSkillTable" class="multiselect">
-									<tr>
-										<th>Skill</th>
-										<th>Actions</th>
-									</tr>
-									<!-- Creates the already chosen skills -->
-									<% userSkills.forEach(function(skill) { %>
-											<tr id="<%=skill.skill_id%>">
-												<td><%=skill.skill_name%></td>
-												<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%=skill.skill_id%>')">Remove</button></td>
-											</tr>
-									<% }) %>
-								</table>
+							<button type="button" id="addSkill" onclick="userprefsAddSkill()">Add Skill</button>
+							<br>
+							<!-- Where the skills get added -->
+							<table id="selectedSkillTable" class="multiselect">
+								<tr>
+									<th>Skill</th>
+									<th>Actions</th>
+								</tr>
+								<!-- Creates the already chosen skills -->
+								<% userSkills.forEach(function(skill) { %>
+										<tr id="<%=skill.skill_id%>">
+											<td><%=skill.skill_name%></td>
+											<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%=skill.skill_id%>')">Remove</button></td>
+										</tr>
+								<% }) %>
+							</table>
 							<label for="preferences">Preferences</label>
 								<textarea type="" id="preferences" name="preferences" maxlength="500"><%=profile.preferences%></textarea>
 								<br>
