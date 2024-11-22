@@ -197,6 +197,17 @@ tr:nth-child(even) {
 	background-color: #3a3838;
 }
 
+button {
+	padding: 1em 1em;
+	margin: 0.25em 0.25em;
+	background-color: #969494;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
 /* Button Variants */
 button.accept {
 	background-color: #5cb85c;
@@ -207,6 +218,8 @@ button.cancel {
 	background-color: #d9534f;
 	color: white;
 }
+
+
 
 textarea#description {
 		width: 100%;

@@ -88,11 +88,21 @@
 									</tr>
 									<!-- Creates the already chosen skills -->
 									<% userSkills.forEach(function(skill) { %>
-											<tr id="<%=skill.skill_id%>">
+										<tr id="<%=skill.skill_id%>">
 												<td><%=skill.skill_name%></td>
-												<td><button type="button" class="fill cancel" onclick="userprefsRemoveSkill('<%=skill.skill_id%>')">Remove</button></td>
-											</tr>
-									<% }) %>
+												<td>
+														<button 
+																type="button" 
+																class="btn remove-btn cancel" 
+																onclick="userprefsRemoveSkill('<%=skill.skill_id%>')"
+																aria-label="Remove skill <%=skill.skill_name%>"
+														>
+																Remove
+														</button>
+												</td>
+										</tr>
+								<% }) %>
+								
 								</table>
 							<label for="preferences">Preferences</label>
 								<textarea type="" id="preferences" name="preferences" maxlength="500"><%=profile.preferences%></textarea>
