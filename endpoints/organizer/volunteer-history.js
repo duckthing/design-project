@@ -32,7 +32,6 @@ exports.get = function (req, res) {
 		ORDER BY
 			e.event_date DESC
 	`).all(userId);
-	console.log(historyData);
 
 	res.render(path.join(__dirname, '../../views/pages/organizer/volunteer-history.ejs'), {
 		events: historyData,
