@@ -1,65 +1,59 @@
 <!-- views/pages/organizer/volunteer-history.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer History</title>
-    <link rel="stylesheet" href="/css/history.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Volunteer History</title>
+	<link rel="stylesheet" href="/css/history.css">
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav id="main-nav">
-        <div class="nav-header">
-            <button class="nav-toggle" id="nav-toggle-btn">&#9776;</button>
-        </div>
-        <div class="nav-links" id="nav-links">
-            <a class="nav-link" href="/">Home</a>
-            
-            <% if (session && session.isAuthenticated) { %>
-                <% if (session.organizer) { %>
-                    <a class="nav-link" href="/organizer/event-creation-page">Create Event</a>
-                    <a class="nav-link" href="/organizer/volunteer-matching-form">Match Volunteer</a>
-                <% } else { %>
-                    <a class="nav-link" href="/user/user-profile-management">Profile</a>
-                    <a class="nav-link" href="/user/notifications">Notifications</a>
-                    <a class="nav-link" href="/organizer/volunteer-history">History</a>
-                <% } %>
-                <a class="nav-link" href="/logout">Logout</a>
-            <% } else { %>
-                <a class="nav-link" href="/login">Log in</a>
-            <% } %>
-        </div>
-    </nav>
-  <div class="container">
-      <h1>Your Volunteer History</h1>
-      <table id="volunteer-history">
-          <thead>
-              <tr>
-                  <th>Event Name</th>
-                  <th>Date</th>
-                  <th>Required Skills</th>
-                  <th>Urgency</th>
-                  <th>Location</th>
-                  <th>Status</th>
-              </tr>
-          </thead>
-          <tbody>
-              <% events.forEach(function(event) { %>
-              <tr>
-                  <td><%= event.eventName %></td>
-                  <td><%= event.date %></td>
-                  <td><%= event.requiredSkills %></td>
-                  <td><%= event.urgency %></td>
-                  <td><%= event.location %></td>
-                  <td class="<%= event.status.toLowerCase().replace(' ', '-') %>"><%= event.status %></td>
-              </tr>
-              <% }) %>
-          </tbody>
-      </table>
-      <!-- Home Button -->
-      <a id="home-page" href="/">Go Home</a>
-      <script src="/js/menu.js"></script>
-  </div>
+	<!-- Navbar -->
+	<%- include('../../components/navbar', {session: session}) %>
+	<div class="container">
+		<h1>Your Volunteer History</h1>
+		<table id="volunteer-history">
+			<thead>
+				<tr>
+					<th>Event Name</th>
+					<th>Date</th>
+					<th>Required Skills</th>
+					<th>Urgency</th>
+					<th>Location</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% events.forEach(function(event) { %>
+					<tr>
+						<td>
+							<%= event.eventName %>
+						</td>
+						<td>
+							<%= event.date %>
+						</td>
+						<td>
+							<%= event.requiredSkills %>
+						</td>
+						<td>
+							<%= event.urgency %>
+						</td>
+						<td>
+							<%= event.location %>
+						</td>
+						<td class="<%= event.status.toLowerCase().replace(' ', '-') %>">
+							<%= event.status %>
+						</td>
+					</tr>
+				<% }) %>
+			</tbody>
+		</table>
+		<!-- Home Button -->
+		<a id="home-page" href="/">Go Home</a>
+		<script src="/js/menu.js"></script>
+	</div>
 </body>
+
 </html>
