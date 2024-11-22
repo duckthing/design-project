@@ -266,6 +266,34 @@ if (dbSource.databaseJustCreated) {
 		}
 	});
 
+	const volunteerHistoryData = [
+		{
+			user_account_id: 2,
+			event_name: "Beach Cleanup",
+			event_date: "2024-10-01",
+			required_skills: "Teamwork, Environmental Awareness",
+			urgency: "High",
+			location: "Santa Monica Beach",
+			status: "Completed"
+		},
+		{
+			user_account_id: 2,
+			event_name: "Community Food Giveaway",
+			event_date: "2024-09-20",
+			required_skills: "Teamwork",
+			urgency: "High",
+			location: "Discovery Green",
+			status: "Completed"
+		},
+	];
+
+	volunteerHistoryData.forEach(function(d) {
+		db.prepare(`
+			INSERT INTO volunteer_history (user_account_id, event_name, event_date, required_skills, urgency, location, status)
+			VALUES (?, ?, ?, ?, ?, ?, ?)
+		`).run(d.user_account_id, d.event_name, d.event_date, d.required_skills, d.urgency, d.location, d.status);
+	});
+
 	let organizerData = [
 		{
 			username: "organizer",
