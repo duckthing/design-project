@@ -102,7 +102,7 @@ CREATE INDEX idx_event_city
 ON events (city);
 
 CREATE TABLE IF NOT EXISTS event_requires_skills (
-	event_id			INTEGER,
+	event_id			INTEGER NOT NULL,
 	skill_id			INTEGER NOT NULL,
 
 	UNIQUE(event_id, skill_id),

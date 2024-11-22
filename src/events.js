@@ -85,7 +85,7 @@ function createEvent(eventName, address, city, stateCode, zipcode, urgent, event
 		description
 	);
 
-	const eventID = info.lastInsertRowId;
+	const eventID = info.lastInsertRowid;
 	skillsRequired.forEach(function(skillID) {
 		addRequiredSkillToEventID(eventID, skillID);
 	});
