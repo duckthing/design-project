@@ -19,32 +19,31 @@
 				<tr>
 					<th>Event Name</th>
 					<th>Date</th>
-					<th>Required Skills</th>
 					<th>Urgency</th>
 					<th>Location</th>
-					<th>Status</th>
+					<th>RSVP Status</th>
 				</tr>
 			</thead>
 			<tbody>
 				<% events.forEach(function(event) { %>
 					<tr>
 						<td>
-							<%= event.eventName %>
+							<%= event.event_name %>
 						</td>
 						<td>
-							<%= event.date %>
+							<% const date = new Date(); %>
+							<% date.setTime(event.event_date * 1000); %>
+							<% const dateStr = date.toISOString().split('T')[0]; %>
+							<%= dateStr %>
 						</td>
 						<td>
-							<%= event.requiredSkills %>
-						</td>
-						<td>
-							<%= event.urgency %>
+							<%= event.urgency == 0 ? "Urgent" : "Normal" %>
 						</td>
 						<td>
 							<%= event.location %>
 						</td>
-						<td class="<%= event.status.toLowerCase().replace(' ', '-') %>">
-							<%= event.status %>
+						<td>
+							<%= event.rsvp_status %>
 						</td>
 					</tr>
 				<% }) %>
