@@ -13,15 +13,18 @@ function userprefsCreateSkillRow(id, name) {
 	const skillColumn = document.createElement("td");
 	skillColumn.innerText = name;
 
-	const deleteColumn = document.createElement("button");
-	deleteColumn.type = "button";
-	deleteColumn.className = "fill cancel";
-	// deleteColumn.onclick = `userprefsRemoveSkill(${id})`;
-	deleteColumn.addEventListener("click", () => {userprefsRemoveSkill(id);}, false);
-	deleteColumn.innerText = "Remove";
+	const actionsColumn = document.createElement("td");
 
+	const deleteButton = document.createElement("button");
+	deleteButton.type = "button";
+	deleteButton.className = "fill cancel";
+	// deleteButton.onclick = `userprefsRemoveSkill(${id})`;
+	deleteButton.addEventListener("click", () => {userprefsRemoveSkill(id);}, false);
+	deleteButton.innerText = "Remove";
+
+	actionsColumn.insertAdjacentElement("afterbegin", deleteButton)
 	tr.insertAdjacentElement("beforeend", skillColumn);
-	tr.insertAdjacentElement("beforeend", deleteColumn);
+	tr.insertAdjacentElement("beforeend", actionsColumn);
 
 	return tr
 }
