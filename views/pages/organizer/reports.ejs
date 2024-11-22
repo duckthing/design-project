@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/css/example.css">
+		<title>View Matched Volunteers</title>
+	</head>
+	<body>
+		<%- include('../../components/navbar', {session: session}) %>
+
+		<div class="center">
+			<article>
+				<h1>Generate a report</h1>
+				<!-- Personal info -->
+				<div class="panelblock">
+					<form method="post">
+						<h2>Report options</h2>
+						<label for="fromDate">From</label>
+							<input type="date" id="fromDate" name="fromDate" required>
+							<br>
+							<br>
+						<label for="toDate">To</label>
+							<input type="date" id="toDate" name="toDate" required>
+							<br>
+							<br>
+						<label for="reportType">Report Type</label>
+							<select id="reportType" name="reportType" required>
+								<option value="participationHistory">Participation History</option>
+								<option value="eventAssignments">Event Assignments</option>
+							</select>
+							<br>
+							<br>
+						<label for="reportFormat">Report Format</label>
+							<select id="reportFormat" name="reportFormat" required>
+								<option value="csv">CSV</option>
+								<option value="pdf">PDF</option>
+							</select>
+							<br>
+							<br>
+
+						<br>
+						<input type="submit" value="Download report">
+					</form>
+				</div>
+			</article>
+		</div>
+
+	</body>
+</html>
