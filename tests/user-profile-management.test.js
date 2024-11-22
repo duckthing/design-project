@@ -1,73 +1,151 @@
+// tests/user-profile-management.test.js
+
+jest.mock('../src/accounts');
+jest.mock('../src/skills');
+jest.mock('../src/states');
+
 const request = require('supertest');
 const express = require('express');
-const bodyParser = require('body-parser');
 const session = require('express-session');
-const profileModule = require('../endpoints/user/user-profile-management');  // Adjust the path to match your project
+const bodyParser = require('body-parser');
+const path = require('path');
+const userProfile = require('../endpoints/user/user-profile-management');
+const accountsModule = require('../src/accounts');
+const skillsModule = require('../src/skills');
+const statesModule = require('../src/states');
 
-// Set up an Express app for testing
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '..', 'views'));
+
+app.use(
+  session({
     secret: 'test-secret',
     resave: false,
     saveUninitialized: false,
-}));
+  })
+);
 
-// Set up routes for testing
-app.get('/user/user-profile-management', profileModule.get);
-app.post('/user/user-profile-management', profileModule.post);
+// Mock session middleware
+app.use((req, res, next) => {
+  req.session.isAuthenticated = true;
+  req.session.user = {
+    username: 'user',
+    user_account_id: 1,
+  };
+  next();
+});
 
-describe('User Profile Management Module', () => {
+// Routes
+app.get('/user/user-profile-management', userProfile.get);
+app.post('/user/user-profile-management', userProfile.post);
 
-    // Ensure the session is mocked before each test
-    beforeEach(() => {
-        app.use((req, res, next) => {
-            req.session.user = { username: 'user1' };  // Simulate logged-in user
-            next();
-        });
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).send('Internal Server Error');
+});
+
+describe('User Profile Management', () => {
+  beforeEach(() => {
+    // Clear mock function calls
+    accountsModule.getUserByUsername.mockClear();
+    accountsModule.updateUserAccountProfile.mockClear();
+    accountsModule.getSkillsByUserID.mockClear();
+    accountsModule.getAvailabilityByUserID.mockClear();
+
+    // Mock return values
+    skillsModule.getAllSkills.mockReturnValue([
+      { skill_id: 1, skill_name: 'Skill1' },
+      { skill_id: 2, skill_name: 'Skill2' },
+    ]);
+
+    statesModule.getAllStates.mockReturnValue([
+      { state_code: 'TS', state_name: 'Test State' },
+      { state_code: 'TX', state_name: 'Texas' },
+    ]);
+  });
+
+  test('GET /user/user-profile-management should render profile page for authenticated users', async () => {
+    accountsModule.getUserByUsername.mockReturnValue({
+      user_account_id: 1,
+      username: 'user',
+      full_name: 'Test User',
+      address1: '123 Test St',
+      address2: '',
+      city: 'Testville',
+      state: 'TS',
+      zipcode: '12345',
+      preferences: 'No preferences',
     });
 
-    // Test for GET request: should return the profile page with default user data
-    it('should return the profile page with default data', async () => {
-        const res = await request(app).get('/user/user-profile-management');
-        expect(res.statusCode).toEqual(200);  // Expect status 200 for a successful GET
-        expect(res.text).toContain('John Doe');  // Check for default user data
+    accountsModule.getSkillsByUserID.mockReturnValue([
+      { skill_id: 1, skill_name: 'Skill1' },
+    ]);
+
+    accountsModule.getAvailabilityByUserID.mockReturnValue([
+      { available_at: 1700000000 }, // Mocked timestamp
+    ]);
+
+    const response = await request(app).get('/user/user-profile-management');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toContain('Update your profile');
+  });
+
+  test('POST /user/user-profile-management should update profile with valid data', async () => {
+    accountsModule.getUserByUsername.mockReturnValue({
+      user_account_id: 1,
+      username: 'user',
     });
 
-    // Test for POST request: should update the user profile and redirect
-    it('should update the user profile and redirect', async () => {
-        const res = await request(app)
-            .post('/user/user-profile-management')
-            .send({
-                fullName: 'Jane Smith',
-                address1: '456 New Street',
-                address2: '',
-                city: 'Dallas',
-                state: 'TX',
-                skillSelect: ['moving'],  // Array format for skills
-                preferences: 'I prefer working outdoors',
-                availability: '2024-03-15',
-            });
+    const response = await request(app)
+      .post('/user/user-profile-management')
+      .type('form')
+      .send({
+        fullName: 'Test User',
+        address1: '123 Test St',
+        address2: '',
+        city: 'Testville',
+        state: 'TS',
+        zipcode: '12345',
+        preferences: 'No preferences',
+        skills: '1,2',
+        availability: '2024-01-01,2024-01-02',
+      });
 
-        expect(res.statusCode).toEqual(302);  // Expect redirection after successful update
-        expect(res.header.location).toBe('/user/user-profile-management');
-    });
+    expect(response.statusCode).toBe(302);
+    expect(response.headers.location).toBe('/user/user-profile-management');
+    expect(accountsModule.updateUserAccountProfile).toHaveBeenCalledWith(
+      1,                // user_account_id
+      'user',           // username
+      null,             // password
+      'Test User',      // fullName
+      '123 Test St',    // address1
+      '',               // address2
+      'Testville',      // city
+      'TS',             // state
+      '12345',          // zipcode
+      'No preferences', // preferences
+      ['1', '2'],       // skills
+      ['2024-01-01', '2024-01-02'] // availability
+    );
+  });
 
-    // Test for POST request: should return 400 for missing required fields
-    it('should return 400 for missing required fields', async () => {
-        const res = await request(app)
-            .post('/user/user-profile-management')
-            .send({
-                fullName: '',  // Missing required fullName
-                address1: '789 Fake St',
-                city: '',
-                state: 'TX',
-                skillSelect: ['moving'],
-                preferences: '',
-                availability: '2024-03-15',
-            });
+  test('POST /user/user-profile-management should handle missing required fields', async () => {
+    const response = await request(app)
+      .post('/user/user-profile-management')
+      .type('form')
+      .send({
+        address1: '123 Test St',
+        city: 'Testville',
+        state: 'TS',
+      });
 
-        expect(res.statusCode).toEqual(400);  // Expect validation error
-        expect(res.text).toContain("Please fill all required fields.");
-    });
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toContain('Please fill all required fields.');
+  });
 });

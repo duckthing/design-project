@@ -1,3 +1,5 @@
+<!-- views/pages/login.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,10 +18,16 @@
             <a class="nav-link" href="/register">Register</a>
         </div>
     </nav>
-    
+
     <div class="center">
         <article>
             <h1>Login</h1>
+
+            <!-- Display error message if present -->
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="error"><%= error %></div>
+            <% } %>
+
             <form action="/login" method="post">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>

@@ -1,11 +1,11 @@
 {
   "name": "design-project",
   "version": "1.0.0",
-  "description": "Install all packages first:",
+  "description": "Your project description here",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest --coverage --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",
@@ -20,5 +20,27 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "supertest": "^7.0.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "endpoints/**/*.js",
+      "src/**/*.js",
+      "!**/node_modules/**",
+      "!**/tests/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1",
+      "^endpoints/(.*)$": "<rootDir>/endpoints/$1"
+    }
   }
 }

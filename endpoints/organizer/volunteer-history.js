@@ -1,3 +1,4 @@
+// endpoints/organizer/volunteer-history.js
 const path = require('path');
 const accountsModule = require("../../src/accounts");
 const db = require("../../src/dbSource").db;
@@ -29,10 +30,12 @@ function validateEvent(event) {
   return null;
 }
 
+exports.validateEvent = validateEvent;
+
 exports.get = function(req, res) {
-	if (!req.session.isAuthenticated) {
-		return res.redirect('/login');
-	}
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
 
   if (!req.session.user) {
     return res.redirect("/login");
@@ -45,7 +48,7 @@ exports.get = function(req, res) {
     WHERE user_account_id = ? AND status = 'Completed'
   `).all(userId);
 
-	const errors = [];
+  const errors = [];
   historyData.forEach((event, index) => {
     const validationError = validateEvent(event);
     if (validationError) {
@@ -59,8 +62,7 @@ exports.get = function(req, res) {
   }
 
   res.render(path.join(__dirname, '../../views/pages/organizer/volunteer-history.ejs'), {
-		events: historyData,
-		session: req.session
-	});
-
+    events: historyData,
+    session: req.session
+  });
 };

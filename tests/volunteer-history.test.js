@@ -1,37 +1,43 @@
-const request = require('supertest');
-const express = require('express');
-const volunteerHistory = require('../endpoints/organizer/volunteer-history');
+// tests/volunteer-history.test.js
+const { validateEvent } = require('../endpoints/organizer/volunteer-history');
 
-const app = express();
-app.get('/api/volunteer-history', volunteerHistory.get);
-
-describe('GET /api/volunteer-history', () => {
-  it('should return 200 OK and an array of volunteer history events', async () => {
-    const response = await request(app).get('/api/volunteer-history');
-    expect(response.statusCode).toBe(200);
-    expect(Array.isArray(response.body.events)).toBe(true);
-    expect(response.body.events.length).toBeGreaterThan(0);
-
-    const event = response.body.events[0];
-    expect(event).toHaveProperty('eventName');
-    expect(event).toHaveProperty('date');
-    expect(event).toHaveProperty('requiredSkills');
-    expect(event).toHaveProperty('urgency');
-    expect(event).toHaveProperty('location');
-    expect(event).toHaveProperty('status');
+describe('Volunteer History Validation', () => {
+  test('should validate a correct event successfully', () => {
+    const validEvent = {
+      eventName: 'Valid Event',
+      date: '2024-01-01',
+      requiredSkills: 'Skill1',
+      urgency: 'High',
+      location: 'Test Location',
+      status: 'Completed',
+    };
+    const validationError = validateEvent(validEvent);
+    expect(validationError).toBeNull();
   });
 
-  it('should validate event data correctly', () => {
+  test('should return error for event with missing fields', () => {
     const invalidEvent = {
       eventName: 'Invalid Event',
-      date: '',
-      requiredSkills: 'Invalid Skill',
-      urgency: 'Unknown',
-      location: 'Unknown Location',
-      status: 'Unknown',
+      date: '2024-01-01',
+      // Missing requiredSkills
+      urgency: 'High',
+      location: 'Test Location',
+      status: 'Completed',
     };
+    const validationError = validateEvent(invalidEvent);
+    expect(validationError).toBe('Missing required field: requiredSkills');
+  });
 
-    const validationError = volunteerHistory.validateVolunteerHistory(invalidEvent);
-    expect(validationError).toContain('Invalid status value for event');
+  test('should return error for event with invalid status', () => {
+    const invalidEvent = {
+      eventName: 'Invalid Event',
+      date: '2024-01-01',
+      requiredSkills: 'Skill1',
+      urgency: 'High',
+      location: 'Test Location',
+      status: 'InvalidStatus',
+    };
+    const validationError = validateEvent(invalidEvent);
+    expect(validationError).toBe('Invalid status value for event "Invalid Event": InvalidStatus');
   });
 });
