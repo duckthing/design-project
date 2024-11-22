@@ -32,7 +32,7 @@ exports.post = async function(req, res) {
 	const eventDate = new Date(req.body.eventDate);
 	const urgent = req.body.urgent === "on" ? 1 : 0;
 	const description = req.body.description;
-	const skillsRequired = Array.isArray(req.body.skillRequired) ? req.body.skillRequired : [req.body.skillRequired];
+	const skills = req.body.skills != null && Array.isArray(req.body.skills) ? req.body.skills : [];
 	const address = req.body.address;
 	const city = req.body.city;
 	const stateCode = req.body.state;
@@ -40,7 +40,7 @@ exports.post = async function(req, res) {
 
 	try {
 		console.log('Creating event...');
-		const eventId = events.createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skillsRequired);
+		const eventId = events.createEvent(eventName, address, city, stateCode, zipcode, urgent, eventDate, description, skills);
 		
 		// Get all users
 		console.log('Fetching users with emails...');
