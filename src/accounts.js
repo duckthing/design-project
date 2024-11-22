@@ -258,7 +258,7 @@ if (dbSource.databaseJustCreated) {
 			d.address1, 
 			d.city, 
 			d.state, 
-			0, 
+			d.zipcode,
 			d.preferences
 		);
 		if (account) {

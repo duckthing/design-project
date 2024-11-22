@@ -16,7 +16,6 @@
 					<tr>
 						<th>Event Name</th>
 						<th>Volunteer Name</th>
-						<th>RSVP Status</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -25,12 +24,6 @@
 						<tr>
 							<td><%= match.event_name %></td>
 							<td><%= match.full_name %></td>
-							<td>
-								<% const rsvpStatus = match.rsvp_status || 'N/A' %>
-								<span class="rsvp-status <%= rsvpStatus.toLowerCase().replace(' ', '-') %>">
-									<%= rsvpStatus %>
-								</span>
-							</td>
 							<td class="eventActions">
 								<button class="accept">Assign</button>
 								<button>Ignore</button>

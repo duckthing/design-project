@@ -93,20 +93,23 @@ function createEvent(eventName, address, city, stateCode, zipcode, urgent, event
 }
 exports.createEvent = createEvent;
 
-const getAllVolunteerMatchesStmt = db.prepare(`
-	SELECT DISTINCT 
-		v.full_name, 
-		e.event_id, 
-		e.event_name,
-		COALESCE(r.rsvp_status, 'N/A') as rsvp_status
-	FROM user_accounts v
-	INNER JOIN user_available_at a ON v.user_account_id = a.user_account_id
-	INNER JOIN events e ON date(a.available_at, 'unixepoch') = date(e.event_date, 'unixepoch')
-	LEFT JOIN event_rsvps r ON e.event_id = r.event_id AND v.user_account_id = r.user_account_id
-	ORDER BY e.event_id
+// TODO: Make it return only future events
+const getAllVolunteerMatchesStmt2 = db.prepare(`
+	SELECT
+		v.user_account_id,
+		v.full_name,
+		e.event_id,
+		e.event_name
+	FROM
+		user_accounts v,
+		events e INNER JOIN event_rsvps r ON e.event_id = r.event_id
+	WHERE
+		r.rsvp_status = 'Interested' AND
+		v.user_account_id = r.user_account_id AND
+		e.event_date > unixepoch()
 `);
 function getAllVolunteerMatches() {
-	const matches = getAllVolunteerMatchesStmt.all();
+	const matches = getAllVolunteerMatchesStmt2.all();
 	return matches;
 }
 exports.getAllVolunteerMatches = getAllVolunteerMatches;
@@ -132,7 +135,7 @@ if (dbSource.databaseJustCreated) {
 			stateCode: "TX",
 			zipcode: 12345,
 			urgent: false,
-			eventDate: new Date(2024, 0, 1),
+			eventDate: new Date(2024, 11, 29),
 			description: "Help clean up the local beach!",
 			skillsRequired: [1, 2]
 		}
