@@ -14,7 +14,7 @@
     <div class="center">
         <div class="events-list">
             <% events.forEach(event => { %>
-                <div class="event-card <%= (typeof highlightedEventId !== 'undefined' && event.event_id.toString() === highlightedEventId) ? 'highlighted' : '' %>">
+                <div id="eventDiv<%= event.event_id %>" class="event-card <%= (typeof highlightedEventId !== 'undefined' && event.event_id.toString() === highlightedEventId) ? 'highlighted' : '' %>">
                     <div class="event-main-info">
                         <h2><%= event.event_name %></h2>
                         <p><strong>Date:</strong> <%= new Date(event.event_date * (event.event_date < 10000000000 ? 1000 : 1)).toLocaleString() %></p>
@@ -24,8 +24,8 @@
                         </div>
                         <p><strong>Urgency:</strong> <%= event.urgent ? "High" : "Low" %></p>
                         
-                        <button data-event-id="<%= event.event_id %>" data-status="Going" onclick="rsvpEvent(this)">I'm Going</button>
-                        <button data-event-id="<%= event.event_id %>" data-status="Interested" onclick="rsvpEvent(this)">Interested</button>
+                        <button data-event-id="<%= event.event_id %>" data-status="Interested" onclick="rsvpEvent(this)">RSVP</button>
+                        <button data-event-id="<%= event.event_id %>" data-status="NotInterested" onclick="rsvpEvent(this)">Not Interested</button>
                     </div>
                     <div class="event-description">
                         <h3>Description</h3>
@@ -33,6 +33,9 @@
                     </div>
                 </div>
             <% }) %>
+			<% if (events.length == 0) {%>
+				<h2>No events, check later</h2>
+			<% } %>
         </div>
     </div>
 
@@ -57,7 +60,10 @@
                 });
 
                 if (response.ok) {
-                    alert('RSVP updated!');
+					// Remove the event
+					const divContainer = document.getElementById("eventDiv" + eventId);
+					divContainer.remove();
+                    alert(`Event successfully marked as '${button.innerText}'`);
                 } else {
                     const errorText = await response.text();
                     alert('Failed to RSVP: ' + errorText);
