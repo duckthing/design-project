@@ -51,22 +51,21 @@ app.use((err, req, res, next) => {
 
 describe('User Profile Management', () => {
   beforeEach(() => {
-    // Clear mock function calls
     accountsModule.getUserByUsername.mockClear();
     accountsModule.updateUserAccountProfile.mockClear();
     accountsModule.getSkillsByUserID.mockClear();
     accountsModule.getAvailabilityByUserID.mockClear();
 
-    // Mock return values
     skillsModule.getAllSkills.mockReturnValue([
       { skill_id: 1, skill_name: 'Skill1' },
       { skill_id: 2, skill_name: 'Skill2' },
     ]);
 
-    statesModule.getAllStates.mockReturnValue([
+    // Update the mock for statesModule
+    statesModule.states = [
       { state_code: 'TS', state_name: 'Test State' },
       { state_code: 'TX', state_name: 'Texas' },
-    ]);
+    ];
   });
 
   test('GET /user/user-profile-management should render profile page for authenticated users', async () => {
@@ -120,17 +119,17 @@ describe('User Profile Management', () => {
     expect(response.statusCode).toBe(302);
     expect(response.headers.location).toBe('/user/user-profile-management');
     expect(accountsModule.updateUserAccountProfile).toHaveBeenCalledWith(
-      1,                // user_account_id
-      'user',           // username
-      null,             // password
-      'Test User',      // fullName
-      '123 Test St',    // address1
-      '',               // address2
-      'Testville',      // city
-      'TS',             // state
-      '12345',          // zipcode
+      1, // user_account_id
+      'user', // username
+      null, // password
+      'Test User', // fullName
+      '123 Test St', // address1
+      '', // address2
+      'Testville', // city
+      'TS', // state
+      '12345', // zipcode
       'No preferences', // preferences
-      ['1', '2'],       // skills
+      ['1', '2'], // skills
       ['2024-01-01', '2024-01-02'] // availability
     );
   });
