@@ -46,8 +46,7 @@ const stmtGetAssignments = db.prepare(`
 		event_rsvps r
 	WHERE
 		v.user_account_id = r.user_account_id AND
-		r.event_id = e.event_id AND
-		r.rsvp_status = 'Confirmed'
+		r.event_id = e.event_id
 `);
 function getAssignmentRecords() {
 	return stmtGetAssignments.all();
