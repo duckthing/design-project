@@ -12,6 +12,7 @@ exports.get = function(req, res) {
 		// Handle case where account is not found
 		return res.redirect("/login");
 	}
+	const accountId = account.user_account_id;
 
     const highlightedEventId = req.query.highlight || null;
     
@@ -20,12 +21,12 @@ exports.get = function(req, res) {
         SELECT DISTINCT e.event_id, e.event_name, e.event_date, e.address, e.city, e.state_code, e.zipcode, e.urgent, e.description 
         FROM
             events e
-            LEFT JOIN event_rsvps r ON r.event_id = e.event_id
+            LEFT JOIN event_rsvps r ON r.event_id = e.event_id AND r.user_account_id = ?
         WHERE
             r.user_account_id IS NULL AND
             e.event_date > unixepoch()
         ORDER BY e.event_date
-    `).all();
+    `).all(accountId);
     
     res.render(path.join(__dirname, '../../views/pages/user/events'), {
         events: events,
